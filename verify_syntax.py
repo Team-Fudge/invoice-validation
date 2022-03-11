@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 import re
+import os
+from error import InputError, AccessError
 
 #file_name should be of type string
 #xml_tag should be of type string
@@ -14,7 +16,8 @@ def retrieve_tag_value (file_name, xml_tag):
     
     #
     value = data.find_all(xml_tag)
-
+    if value == []:
+        return [None, None]
     for i in range(len(value)):
         value[i] = value[i].get_text()
         if value[i] == "":
@@ -31,8 +34,16 @@ def check_section_exists(invoice_file, tag, index):
     return value
 
 def identify_errors(invoice_file):
-
+    disclaimer = "The current version of this microservice can only test syntax errors BR-01 to BR-16"
+    
+    if  not os.path.isfile(invoice_file):
+        raise InputError("No invoice recieved.")   
+    
+    if os. stat(invoice_file).st_size == 0:
+        return {"broken_rules": "The provided file is empty", "broken_rules_detailed": "The provided file is empty", "disclaimer": disclaimer}
+    
     unchecked = 1
+    
     rule_book = {
         "[BR-01]-An Invoice shall have a Specification identifier (BT-24).": retrieve_tag_value (invoice_file, "cbc:CustomizationID")[0],
         "[BR-02]-An Invoice shall have an Invoice number (BT-1).": retrieve_tag_value (invoice_file, "cbc:ID")[0],
@@ -97,7 +108,7 @@ def identify_errors(invoice_file):
     }
     broken_rules = []
     broken_rules_detailed = []
-
+    
     #Add disclaimer to be passed into report
     disclaimer = "The current version of this microservice can only test syntax errors BR-01 to BR-16"
 
@@ -111,7 +122,7 @@ def identify_errors(invoice_file):
 
 
 if __name__ == "__main__":
-    invoice_file = "example1.xml"
+    invoice_file = "example_empty.xml"
     print(identify_errors(invoice_file))
 
 # Using find() to extract attributes
