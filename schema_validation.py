@@ -6,6 +6,7 @@ import xmlschema
 from error import AccessError, InputError
 
 def schema_validation(invoice):
+    
     schema = xmlschema.XMLSchema('schema_rules.xsd')
     validation_error_iterator = schema.iter_errors(invoice)
     errors = list()
@@ -14,7 +15,6 @@ def schema_validation(invoice):
         errors.append(err)
         print(err)
     return errors
-
-
+    
 if __name__ == "__main__":
     schema_validation('invoice_sample.xml')
