@@ -392,6 +392,7 @@
 <xsd:element name="ProcurementLegislationDocumentReference" type="DocumentReferenceType"/>
 <xsd:element name="ProcurementProject" type="ProcurementProjectType"/>
 <xsd:element name="ProcurementProjectLot" type="ProcurementProjectLotType"/>
+<xsd:element name="ProjectReference" type="ProjectReferenceType"/>
 <xsd:element name="PromisedDeliveryPeriod" type="PeriodType"/>
 <xsd:element name="PromotionalEvent" type="PromotionalEventType"/>
 <xsd:element name="PromotionalEventLineItem" type="PromotionalEventLineItemType"/>

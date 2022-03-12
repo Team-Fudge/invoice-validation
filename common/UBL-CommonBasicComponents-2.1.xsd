@@ -92,6 +92,7 @@
 <xsd:element name="BusinessIdentityEvidenceID" type="BusinessIdentityEvidenceIDType"/>
 <xsd:element name="BuyerEventID" type="BuyerEventIDType"/>
 <xsd:element name="BuyerProfileURI" type="BuyerProfileURIType"/>
+<xsd:element name="BuyerReference" type="BuyerReferenceType"/>
 <xsd:element name="CV2ID" type="CV2IDType"/>
 <xsd:element name="CalculationExpression" type="CalculationExpressionType"/>
 <xsd:element name="CalculationExpressionCode" type="CalculationExpressionCodeType"/>
@@ -224,6 +225,7 @@
 <xsd:element name="DocumentStatusCode" type="DocumentStatusCodeType"/>
 <xsd:element name="DocumentType" type="DocumentTypeType"/>
 <xsd:element name="DocumentTypeCode" type="DocumentTypeCodeType"/>
+<xsd:element name="DueDate" type="DueDateType"/>
 <xsd:element name="DurationMeasure" type="DurationMeasureType"/>
 <xsd:element name="Duty" type="DutyType"/>
 <xsd:element name="DutyCode" type="DutyCodeType"/>
@@ -1243,6 +1245,11 @@
 <xsd:extension base="udt:IdentifierType"/>
 </xsd:simpleContent>
 </xsd:complexType>
+<xsd:complexType name="BuyerReferenceType">
+<xsd:simpleContent>
+<xsd:extension base="udt:TextType"/>
+</xsd:simpleContent>
+</xsd:complexType>
 <xsd:complexType name="CV2IDType">
 <xsd:simpleContent>
 <xsd:extension base="udt:IdentifierType"/>
@@ -1896,6 +1903,11 @@
 <xsd:complexType name="DocumentTypeCodeType">
 <xsd:simpleContent>
 <xsd:extension base="udt:CodeType"/>
+</xsd:simpleContent>
+</xsd:complexType>
+<xsd:complexType name="DueDateType">
+<xsd:simpleContent>
+<xsd:extension base="udt:DateType"/>
 </xsd:simpleContent>
 </xsd:complexType>
 <xsd:complexType name="DocumentTypeType">
