@@ -4,6 +4,7 @@ from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 import config
+import peppol_validation
 
 # Errors
 from error import InputError
@@ -54,10 +55,26 @@ def verify_syntax():
 # PEPPOL
 @APP.route("/invoice/verify/peppol", methods=['GET'])
 def verify_peppol():
-    data = request.args.get('data')
-    return dumps({
-        # report
-    })
+    xml_file = request.args.get('data')
+
+    broken_rules = []
+
+    # Validating all Rules
+    broken_rules.append(check_reference_number(xml_file))
+    broken_rules.append(check_date_syntax(xml_file))
+    broken_rules.append(check_currency_Code(xml_file))
+    broken_rules.append(check_if_buyer_seller_address_exists(xml_file))
+    broken_rules.append(check_base_amount_and_percentage(xml_file))
+    broken_rules.append(check_gross_net_amount(xml_file))
+
+    # Getting rid of all None elements in the broken rules 
+    try:
+        while True:
+            broken_rules.remove(None)
+    except ValueError:
+        pass
+
+    return dumps({broken_rules})
 
 # Schema
 @APP.route("/invoice/verify/schema", methods=['GET'])
