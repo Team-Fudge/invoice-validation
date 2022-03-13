@@ -37,3 +37,4 @@ def compile_report(test_result,
         return report
     else:
         return
+        
