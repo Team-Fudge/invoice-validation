@@ -11,6 +11,7 @@ from error import AccessError
 
 # Functions
 import schema_validation
+from verify_syntax import verify_syntax_errors
 
 ######################################################
 
@@ -44,12 +45,12 @@ def verify_wellformedness():
     })
 
 # Syntax
-@APP.route("/invoice/verify/syntax", methods=['GET'])
+@APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
-    data = request.args.get('data')
-    return dumps({
-        # report
-    })   
+    resp = verify_syntax_errors(request.data)
+    return dumps(
+     resp
+    )   
 
 # PEPPOL
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
