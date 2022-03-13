@@ -5,15 +5,98 @@ info:
 servers:
   - url: https://api.server.test/v1
 paths:
-  /test:
+  /invoice/verify/all:
     get:
+      description: 'validates invoice to all routes'
+      requestBody:
+        description: xml invoice as a string
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
       responses:
         '200':
-          description: OK
+          description: A JSON report of validation errors
+          content:
+            application/json:
+              schema: 
+                type: string
+  /invoice/verify/wellformedness:
+    get:
+      description: 'validates invoice wellformedness'
+      requestBody:
+        description: xml invoice as a string
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: A JSON report of validation errors
+          content:
+            application/json:
+              schema: 
+                type: string
   /invoice/verify/syntax:
     get:
       description: 'validates invoice syntax'
-      parameters: []
+      requestBody:
+        description: xml invoice as a string
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
       responses:
         '200':
-          description: OK
+          description: A JSON report of validation errors
+          content:
+            application/json:
+              schema: 
+                type: string
+  /invoice/verify/peppol:
+    get:
+      description: 'validates invoice to peppol rules'
+      requestBody:
+        description: xml invoice as a string
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: A JSON report of validation errors
+          content:
+            application/json:
+              schema: 
+                type: string
+  /invoice/verify/schema:
+    get:
+      description: 'validates invoice schema'
+      requestBody:
+        description: xml invoice as a string
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: A JSON report of validation errors
+          content:
+            application/json:
+              schema: 
+                type: string
+  /active:
+    get:
+      description: 'indicates aliveness of service'
+      responses:
+        '200':
+          description: a dictionary with keys for endpoint activeness
+          content:
+            application/json:
+              schema: 
+                type: string
