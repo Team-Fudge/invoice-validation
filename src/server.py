@@ -69,6 +69,17 @@ def verify_schema():
         # report
     })
 
+#active
+@APP.route("/active", methods=['GET'])
+def active():
+    return dumps({
+        'server_active': True,
+        'wellformedness_validator_active': True,
+        'syntax_validator_active': True,
+        'PEPPOL_validator_active': True,
+        'schema_validator_active': False,
+    })
+
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
     APP.run(port=config.port) # Do not edit this port
