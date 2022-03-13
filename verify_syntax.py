@@ -3,17 +3,26 @@ import re
 import os
 from error import InputError, AccessError
 
-#file_name should be of type string
-#xml_tag should be of type string
-def retrieve_tag_value (file_name, xml_tag):
-    
+def open_file_as_string(file_name):
+
     #open & read file
     with open(file_name, 'r') as f:
-        data = f.read()
- 
+       data = f.read()
+
+    return data
+
+
+
+#file_name should be of type string
+#xml_tag should be of type string
+def retrieve_tag_value (string_xml, xml_tag):
+
+
+    data = string_xml
+
     #extract data from file
     data = BeautifulSoup(data, "xml")
-    
+
     #
     value = data.find_all(xml_tag)
     if value == []:
@@ -22,45 +31,41 @@ def retrieve_tag_value (file_name, xml_tag):
         value[i] = value[i].get_text()
         if value[i] == "":
             value[i] = None
-    #print(value)
     return value
  
-def check_section_exists(invoice_file, tag, index):
-    value = retrieve_tag_value(invoice_file, tag)[index]
+def check_section_exists(string_xml, tag, index):
+    value = retrieve_tag_value(string_xml, tag)[index]
     if value == None:
         return None
     value = value.replace("\n","")
     value = value.replace(" ","")
     return value
 
-def identify_errors(invoice_file):
+def identify_errors(string_xml):
     disclaimer = "The current version of this microservice can only test syntax errors BR-01 to BR-16"
     
-    if  not os.path.isfile(invoice_file):
-        raise InputError("No invoice recieved.")   
-    
-    if os. stat(invoice_file).st_size == 0:
+    if len(string_xml) == 0:
         return {"broken_rules": "The provided file is empty", "broken_rules_detailed": "The provided file is empty", "disclaimer": disclaimer}
     
     unchecked = 1
     
     rule_book = {
-        "[BR-01]-An Invoice shall have a Specification identifier (BT-24).": retrieve_tag_value (invoice_file, "cbc:CustomizationID")[0],
-        "[BR-02]-An Invoice shall have an Invoice number (BT-1).": retrieve_tag_value (invoice_file, "cbc:ID")[0],
-        "[BR-03]-An Invoice shall have an Invoice issue date (BT-2).": retrieve_tag_value (invoice_file, "cbc:IssueDate"),
-        "[BR-04]-An Invoice shall have an Invoice type code (BT-3).": retrieve_tag_value (invoice_file, "cbc:InvoiceTypeCode"),
-        "[BR-05]-An Invoice shall have an Invoice currency code (BT-5).": retrieve_tag_value (invoice_file, "cbc:DocumentCurrencyCode") ,
-        "[BR-06]-An Invoice shall contain the Seller name (BT-27).": retrieve_tag_value(invoice_file,"cbc:RegistrationName")[0],
-        "[BR-07]-An Invoice shall contain the Buyer name (BT-44).":  retrieve_tag_value(invoice_file,"cbc:RegistrationName")[1],
-        "[BR-08]-An Invoice shall contain the Seller postal address.": check_section_exists(invoice_file, "cac:PostalAddress", 0),
-        "[BR-09]-The Seller postal address (BG-5) shall contain a Seller country code (BT-40).": retrieve_tag_value(invoice_file,"cbc:IdentificationCode")[0],
-        "[BR-10]-An Invoice shall contain the Buyer postal address (BG-8).": check_section_exists(invoice_file,"cac:PostalAddress", 1), 
-        "[BR-11]-The Buyer postal address shall contain a Buyer country code (BT-55).": retrieve_tag_value(invoice_file,"cbc:IdentificationCode")[1],
-        "[BR-12]-An Invoice shall have the Sum of Invoice line net amount (BT-106).": retrieve_tag_value(invoice_file,"cbc:LineExtensionAmount")[0],
-        "[BR-13-AUNZ]-An Invoice shall have the Invoice total amount without Tax (BT-109).": retrieve_tag_value(invoice_file,"cbc:TaxExclusiveAmount")[0],
-        "[BR-14-AUNZ]-An Invoice shall have the Invoice total amount with Tax (BT-112).": retrieve_tag_value(invoice_file,"cbc:TaxInclusiveAmount")[0],
-        "[BR-15]-An Invoice shall have the Amount due for payment (BT-115).": retrieve_tag_value(invoice_file,"cbc:PayableAmount")[0],
-        "[BR-16]-An Invoice shall have at least one Invoice line (BG-25)": check_section_exists(invoice_file,"cac:InvoiceLine",0),
+        "[BR-01]-An Invoice shall have a Specification identifier (BT-24).": retrieve_tag_value (string_xml, "cbc:CustomizationID")[0],
+        "[BR-02]-An Invoice shall have an Invoice number (BT-1).": retrieve_tag_value (string_xml, "cbc:ID")[0],
+        "[BR-03]-An Invoice shall have an Invoice issue date (BT-2).": retrieve_tag_value (string_xml, "cbc:IssueDate"),
+        "[BR-04]-An Invoice shall have an Invoice type code (BT-3).": retrieve_tag_value (string_xml, "cbc:InvoiceTypeCode"),
+        "[BR-05]-An Invoice shall have an Invoice currency code (BT-5).": retrieve_tag_value (string_xml, "cbc:DocumentCurrencyCode") ,
+        "[BR-06]-An Invoice shall contain the Seller name (BT-27).": retrieve_tag_value(string_xml,"cbc:RegistrationName")[0],
+        "[BR-07]-An Invoice shall contain the Buyer name (BT-44).":  retrieve_tag_value(string_xml,"cbc:RegistrationName")[1],
+        "[BR-08]-An Invoice shall contain the Seller postal address.": check_section_exists(string_xml, "cac:PostalAddress", 0),
+        "[BR-09]-The Seller postal address (BG-5) shall contain a Seller country code (BT-40).": retrieve_tag_value(string_xml,"cbc:IdentificationCode")[0],
+        "[BR-10]-An Invoice shall contain the Buyer postal address (BG-8).": check_section_exists(string_xml,"cac:PostalAddress", 1), 
+        "[BR-11]-The Buyer postal address shall contain a Buyer country code (BT-55).": retrieve_tag_value(string_xml,"cbc:IdentificationCode")[1],
+        "[BR-12]-An Invoice shall have the Sum of Invoice line net amount (BT-106).": retrieve_tag_value(string_xml,"cbc:LineExtensionAmount")[0],
+        "[BR-13-AUNZ]-An Invoice shall have the Invoice total amount without Tax (BT-109).": retrieve_tag_value(string_xml,"cbc:TaxExclusiveAmount")[0],
+        "[BR-14-AUNZ]-An Invoice shall have the Invoice total amount with Tax (BT-112).": retrieve_tag_value(string_xml,"cbc:TaxInclusiveAmount")[0],
+        "[BR-15]-An Invoice shall have the Amount due for payment (BT-115).": retrieve_tag_value(string_xml,"cbc:PayableAmount")[0],
+        "[BR-16]-An Invoice shall have at least one Invoice line (BG-25)": check_section_exists(string_xml,"cac:InvoiceLine",0),
         "[BR-17]-The Payee name (BT-59) shall be provided in the Invoice: None, if the Payee (BG-10) is different from the Seller (BG-4)": unchecked,
         "[BR-18]-The Seller tax representative name (BT-62) shall be provided in the Invoice: None, if the Seller (BG-4) has a Seller tax representative party (BG-11)": unchecked,
         "[BR-19]-The Seller tax representative postal address (BG-12) shall be provided in the Invoice: None, if the Seller (BG-4) has a Seller tax representative party (BG-11).": unchecked,
@@ -120,10 +125,16 @@ def identify_errors(invoice_file):
     return {"broken_rules": broken_rules, "broken_rules_detailed": broken_rules_detailed, "disclaimer": disclaimer}
 
 
+def open_and_check_error_for_tests(file_name):
+    string_xml = open_file_as_string(file_name)
+    return identify_errors(string_xml)
+
+
 
 if __name__ == "__main__":
-    invoice_file = "example_empty.xml"
-    print(identify_errors(invoice_file))
+    file_name = "example_empty.xml"
+    string_xml = open_file_as_string(file_name)
+    print(identify_errors(string_xml))
 
 # Using find() to extract attributes
 # of the first instance of the tag
