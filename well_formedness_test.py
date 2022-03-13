@@ -13,9 +13,9 @@ def test_wellformedness_invoice_errors():
                                                                        'ERROR ON LINE 34: Opening and ending tag mismatch: Party line 15 and AccountingSupplierParty', 
                                                                        'ERROR ON LINE 101: Opening and ending tag mismatch: AccountingSupplierParty line 14 and Invoice', 
                                                                        'ERROR ON LINE 101: Premature end of data in tag Invoice line 2']})
-
+'''
 # Blackbox/HTTP Testing
 def test_wellformedness_no_invoice():
     assert  verify_wellformedness().statuscode == 400
 
-
+'''

@@ -3,6 +3,7 @@ import signal
 from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
+from wellformedness.py import verify_wellformedness
 import config
 
 # Errors
@@ -36,12 +37,10 @@ def echo():
     })
 
 # Wellformedness
-@APP.route("/invoice/verify/wellformedness", methods=['GET'])
-def verify_wellformedness():
-    data = request.args.get('data')
-    return dumps({
-        # report
-    })
+@APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
+def verify_wellformedness_invoice():
+    resp = verify_wellformedness(request.data) 
+    return dumps(resp)
 
 # Syntax
 @APP.route("/invoice/verify/syntax", methods=['GET'])
