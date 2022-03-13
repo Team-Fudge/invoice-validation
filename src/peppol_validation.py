@@ -19,7 +19,8 @@ def check_xml_empty(string_xml):
     ret = data.get_text() #parse_xml_file(file_name).get_text()
 
     if (ret == ""): #if file is empty
-        raise InputError("XML isn't valid because it is empty") 
+        raise InputError(description = 'XML isnt valid because it is empty') 
+
 
 # Checking if order refernce, billeer order and payment reference exists (PEPPOL - EN16931 - R003)
 def check_reference_number(string_xml):
@@ -45,9 +46,7 @@ def check_date_syntax(string_xml):
     date_result = bs_content.find_all("date")
     invoice_date_result = bs_content.find_all("invoicedate")
     ref_date_result = bs_content.find_all("referencedate")
-
-    print(date_result, invoice_date_result, ref_date_result)
-
+    
     date_result_flag = True
     invoice_date_result_flag = True
     ref_date_result_flag = True
