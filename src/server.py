@@ -70,6 +70,22 @@ def verify_schema():
         # report
     })
 
+
+# all
+@APP.route("/invoice/verify/all", methods=['GET', 'POST'])
+def verify_alll():
+    data = request.data
+    resp = verify_syntax_errors(data)
+    report = compile_report(resp, wellformedness = False, syntax = True, peppol = False, schema = False) 
+
+    resp = verify_wellformedness(data)
+
+    report = compile_report(resp,wellformedness = True, syntax = False, peppol = False, schema = False)
+
+    return dumps(
+     report
+    )  
+
 #active
 @APP.route("/active", methods=['GET'])
 def active():
