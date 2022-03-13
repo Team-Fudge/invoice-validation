@@ -12,6 +12,7 @@ from src.error import AccessError
 # Functions
 import src.schema_validation
 from src.verify_syntax import verify_syntax_errors
+from src.wellformedness import verify_wellformedness
 
 ######################################################
 

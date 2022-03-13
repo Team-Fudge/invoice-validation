@@ -1,6 +1,6 @@
 from lxml import etree
 from lxml.etree import fromstring
-from error import InputError, AccessError
+from src.error import InputError, AccessError
 
 def verify_wellformedness(invoice_file):
 
@@ -8,9 +8,6 @@ def verify_wellformedness(invoice_file):
         raise InputError("No invoice provided")
     
     broken_rules = []
-    
-    if len(invoice_file)== 0:
-        return {"broken_rules": "The provided file is empty"}
     
     # If invoice is successfully well-formed
     # Format of invoice will be a string
@@ -23,5 +20,4 @@ def verify_wellformedness(invoice_file):
         for error in err.error_log:
             error_line = ("ERROR ON LINE %s: %s" % (error.line, error.message))
             broken_rules.append(error_line)
-    
-    return {"broken_rules": broken_rules}
+        return {"broken_rules": broken_rules}

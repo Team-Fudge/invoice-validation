@@ -3,15 +3,15 @@ import signal
 from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
-from wellformedness import verify_wellformedness
-import config
+from src import config
 
 # Errors
-from error import InputError
-from error import AccessError
+from src.error import InputError
+from src.error import AccessError
 
 # Functions
-import schema_validation
+import src.schema_validation
+from src.verify_syntax import verify_syntax_errors
 
 ######################################################
 
@@ -44,19 +44,20 @@ def verify_wellformedness_invoice():
     return dumps(resp)
 
 # Syntax
-@APP.route("/invoice/verify/syntax", methods=['GET'])
+@APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
-    data = request.args.get('data')
-    return dumps({
-        # report
-    })   
+    data = request.data
+    resp = verify_syntax_errors(data)
+    return dumps(
+     resp
+    )   
 
 # PEPPOL
-@APP.route("/invoice/verify/peppol", methods=['GET'])
+@APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
-    data = request.args.get('data')
+    resp = request.args.get('data')
     return dumps({
-        # report
+        resp
     })
 
 # Schema
@@ -65,6 +66,17 @@ def verify_schema():
     data = request.args.get('data')
     return dumps({
         # report
+    })
+
+#active
+@APP.route("/active", methods=['GET'])
+def active():
+    return dumps({
+        'server_active': True,
+        'wellformedness_validator_active': True,
+        'syntax_validator_active': True,
+        'PEPPOL_validator_active': True,
+        'schema_validator_active': False,
     })
 
 if __name__ == "__main__":
