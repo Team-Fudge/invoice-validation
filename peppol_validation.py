@@ -1,5 +1,5 @@
 import sys
-from bs4 import BeautifulSoup as bs
+from bs4 import BeautifulSoup
 import datetime
 import iso4217
 from error import InputError, AccessError
@@ -12,30 +12,20 @@ def date_time_check_format(date_text):
     except ValueError:
         return False
 
-# Parses through an xml file
-def parse_xml_file(file_name):
-
-    with open(file_name, "r") as file:
-        # Read each line in the file, readlines() returns a list of lines
-        content = file.readlines()
-        # Combine the lines in the list into a string
-        content = "".join(content)
-        bs_content = bs(content, "lxml")
-
-        return bs_content
-
 # Checks is xml is empty
-def check_xml_empty(file_name):
+def check_xml_empty(string_xml):
 
-    ret = parse_xml_file(file_name).get_text()
+    data = BeautifulSoup(string_xml, "lxml")
+    ret = data.get_text() #parse_xml_file(file_name).get_text()
 
     if (ret == ""): #if file is empty
         raise InputError("XML isn't valid because it is empty") 
 
 # Checking if order refernce, billeer order and payment reference exists (PEPPOL - EN16931 - R003)
-def check_reference_number(file_name):
+def check_reference_number(string_xml):
 
-    bs_content = parse_xml_file(file_name)
+    # bs_content = parse_xml_file(file_name)
+    bs_content = BeautifulSoup(string_xml, "lxml")
 
     order_ref_result = bs_content.find_all("orderreference")
     biller_ref_result = bs_content.find_all("billersorderreference")
@@ -47,13 +37,16 @@ def check_reference_number(file_name):
     return None
 
 # Checking if date syntax is correct (PEPPOL - EN16931 - F001)
-def check_date_syntax(file_name):
+def check_date_syntax(string_xml):
 
-    bs_content = parse_xml_file(file_name)
+    # bs_content = parse_xml_file(file_name)
+    bs_content = BeautifulSoup(string_xml, "lxml")
 
     date_result = bs_content.find_all("date")
     invoice_date_result = bs_content.find_all("invoicedate")
     ref_date_result = bs_content.find_all("referencedate")
+
+    print(date_result, invoice_date_result, ref_date_result)
 
     date_result_flag = True
     invoice_date_result_flag = True
@@ -81,9 +74,10 @@ def check_date_syntax(file_name):
     return None
 
 # Checking if currency code is valid (PEPPOL - EN16931 - CL007)
-def check_currency_Code(file_name):
+def check_currency_Code(string_xml):
 
-    bs_content = parse_xml_file(file_name)
+    # bs_content = parse_xml_file(file_name)
+    bs_content = BeautifulSoup(string_xml, "lxml")
 
     Currency_result = bs_content.find_all("invoice")
     currency_code = Currency_result[0]["invoicecurrency"]
@@ -95,9 +89,10 @@ def check_currency_Code(file_name):
     return None
 
 # Checking if buyer seller address exists (PEPPOL - EN16931 - R010 and PEPPOL - EN16931 - R020)
-def check_if_buyer_seller_address_exists(file_name):
+def check_if_buyer_seller_address_exists(string_xml):
 
-    bs_content = parse_xml_file(file_name)
+    # bs_content = parse_xml_file(file_name)
+    bs_content = BeautifulSoup(string_xml, "lxml")
     InvoiceRecipient_result = bs_content.find_all("invoicerecipient")
     Biller_result = bs_content.find_all("biller")
 
@@ -114,9 +109,10 @@ def check_if_buyer_seller_address_exists(file_name):
     return None
 
 # Checking if base amount and percentage and amount have the correct relationship (PEPPOL - EN16931 - R040)
-def check_base_amount_and_percentage(file_name):
+def check_base_amount_and_percentage(string_xml):
 
-    bs_content = parse_xml_file(file_name)
+    # bs_content = parse_xml_file(file_name)
+    bs_content = BeautifulSoup(string_xml, "lxml")
     all_base_amounts = bs_content.find_all("baseamount")
     all_percentage = bs_content.find_all("percentage")
     all_amounts = bs_content.find_all("amount")
@@ -133,9 +129,10 @@ def check_base_amount_and_percentage(file_name):
     return None
 
 # Checking if gross_amount - prepaid_amount = payable_amount  (PEPPOL - EN16931 - R046)
-def check_gross_net_amount(file_name):
+def check_gross_net_amount(string_xml):
 
-    bs_content = parse_xml_file(file_name)
+    # bs_content = parse_xml_file(file_name)
+    bs_content = BeautifulSoup(string_xml, "lxml")
     gross_amount = bs_content.find("totalgrossamount")
     prepaid_amount = bs_content.find("prepaidamount")
     payable_amount = bs_content.find("payableamount")
@@ -152,7 +149,6 @@ def check_gross_net_amount(file_name):
 
 if __name__ == "__main__":
     invoice_file = "empty_xml.xml"
-
     check_xml_empty(invoice_file)
 
     
