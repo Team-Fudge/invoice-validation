@@ -3,15 +3,15 @@ import signal
 from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
-import config
+from src import config
 
 # Errors
-from error import InputError
-from error import AccessError
+from src.error import InputError
+from src.error import AccessError
 
 # Functions
-import schema_validation
-from verify_syntax import verify_syntax_errors
+import src.schema_validation
+from src.verify_syntax import verify_syntax_errors
 
 ######################################################
 
@@ -47,7 +47,8 @@ def verify_wellformedness():
 # Syntax
 @APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
-    resp = verify_syntax_errors(request.data)
+    data = request.data
+    resp = verify_syntax_errors(data)
     return dumps(
      resp
     )   
