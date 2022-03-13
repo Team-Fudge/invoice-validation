@@ -40,7 +40,7 @@ def check_section_exists(string_xml, tag, index):
     value = value.replace(" ","")
     return value
 
-def identify_errors(string_xml):
+def verify_syntax_errors(string_xml):
     disclaimer = "The current version of this microservice can only test syntax errors BR-01 to BR-16"
     
     if len(string_xml) == 0:
@@ -126,7 +126,7 @@ def identify_errors(string_xml):
 
 def open_and_check_error_for_tests(file_name):
     string_xml = open_file_as_string(file_name)
-    return identify_errors(string_xml)
+    return verify_syntax_errors(string_xml)
 
 
 
@@ -235,5 +235,5 @@ if __name__ == "__main__":
    </cac:InvoiceLine>
 </Invoice>'''
 
-    print(identify_errors(string_xml))
+    print(verify_syntax_errors(string_xml))
 
