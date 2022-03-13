@@ -52,11 +52,11 @@ def verify_syntax():
     })   
 
 # PEPPOL
-@APP.route("/invoice/verify/peppol", methods=['GET'])
+@APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
-    data = request.args.get('data')
+    resp = request.args.get('data')
     return dumps({
-        # report
+        resp
     })
 
 # Schema
