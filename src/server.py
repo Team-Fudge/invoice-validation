@@ -12,7 +12,7 @@ from src.error import AccessError
 # Functions
 import src.schema_validation
 from src.verify_syntax import verify_syntax_errors
-
+from src.helper import compile_report
 ######################################################
 
 def quit_gracefully(*args):
@@ -49,8 +49,9 @@ def verify_wellformedness():
 def verify_syntax():
     data = request.data
     resp = verify_syntax_errors(data)
+    report = compile_report(resp, wellformedness = False, syntax = True, peppol = False, schema = False) 
     return dumps(
-     resp
+     report
     )   
 
 # PEPPOL
