@@ -164,7 +164,6 @@ terminado==0.8.1
 testpath==0.4.2
 Theano==1.0.5
 toml==0.10.0
-torch==1.10.2+cpu
 tornado==5.1.1
 tqdm==4.62.3
 traitlets==4.3.2
