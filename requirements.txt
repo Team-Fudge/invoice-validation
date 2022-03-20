@@ -93,7 +93,6 @@ pyparsing==2.2.0
 PyPDF2==1.26.0
 pytest==3.10.1
 python-dateutil==2.7.3
-python-gitlab==2.4.0
 python-xlib==0.23
 pytoml==0.1.2
 pytz==2019.1
