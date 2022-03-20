@@ -140,4 +140,4 @@ def active():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
-    APP.run(port=config.port) # Do not edit this port
+    APP.run(host='0.0.0.0', port=config.port) # Do not edit this port
