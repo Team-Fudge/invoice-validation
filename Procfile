@@ -1,1 +1,1 @@
-web: gunicon src/server:app
+web: gunicon server:app
