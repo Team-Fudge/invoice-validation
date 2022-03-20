@@ -93,7 +93,6 @@ olefile==0.46
 openpyxl==2.4.9
 opt-einsum==3.3.0
 packaging==20.9
-pandas==0.23.3+dfsg
 pandocfilters==1.4.2
 parameterized==0.6.1
 paramiko==2.4.2
