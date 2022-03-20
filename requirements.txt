@@ -5,3 +5,4 @@ lxml==4.3.2
 pytest==3.10.1
 requests==2.21.0
 Werkzeug==0.14.1
+gunicorn==20.1.0
