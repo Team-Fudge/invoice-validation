@@ -1,9 +1,9 @@
 from datetime import datetime
 def compile_report(test_result,
-                     wellformedness, 
-                     syntax, 
-                     peppol, 
-                     schema, 
+                     wellformedness = False, 
+                     syntax = False, 
+                     peppol = False, 
+                     schema = False, 
                      report = {
                         "title": "Invoice Validation Report",
                         "date": "",
@@ -22,18 +22,26 @@ def compile_report(test_result,
     if syntax:
         report["syntax_tested"] = True
         report["syntax_test_result"] = test_result
+        report["wellformedness_tested"] = True
+        report["wellformedness_test_result"] = None 
         return report
     if peppol:
         report["peppol_tested"] = True
-        report["wellformedness_test_result"] = test_result
+        report["peppol_test_result"] = test_result
+        report["wellformedness_tested"] = True
+        report["wellformedness_test_result"] = None 
         return report
     if schema:
         report["schema_tested"] = True
         report["schema_test_result"] = test_result
+        report["wellformedness_tested"] = True
+        report["wellformedness_test_result"] = None 
         return report
     if wellformedness:
         report["wellformedness_tested"] = True
         report["wellformedness_test_result"] = test_result
+        report["wellformedness_tested"] = True
+        report["wellformedness_test_result"] = None 
         return report
     else:
         return

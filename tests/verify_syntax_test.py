@@ -1,4 +1,5 @@
-from src.verify_syntax import open_and_check_error_for_tests, verify_syntax_errors
+from src.verify_syntax import verify_syntax_errors
+from src.error import InputError
 import pytest
 
 
@@ -26,4 +27,6 @@ def test_output_correct_xml():
     assert(verify_syntax_errors(open_file_as_string("example_good.xml")) == {"broken_rules": [], "broken_rules_detailed": [], "disclaimer": 'The current version of this microservice can only test syntax errors BR-01 to BR-16'})
 
 def test_output_empty_xml():
-    assert(verify_syntax_errors(open_file_as_string("example_empty.xml")) == {'broken_rules': 'The provided file is empty', 'broken_rules_detailed': 'The provided file is empty', 'disclaimer': 'The current version of this microservice can only test syntax errors BR-01 to BR-16'})
+    with pytest.raises(InputError):
+        verify_syntax_errors(open_file_as_string("example_empty.xml"))
+

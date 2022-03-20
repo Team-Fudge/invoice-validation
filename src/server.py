@@ -4,7 +4,7 @@ from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 from src import config
-from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_base_amount_and_percentage, check_gross_net_amount, check_xml_empty
+#from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_base_amount_and_percentage, check_gross_net_amount, check_xml_empty
 
 # Errors
 from src.error import InputError
@@ -24,7 +24,25 @@ def quit_gracefully(*args):
 APP = Flask(__name__)
 CORS(APP)
 
+def defaultHandler(err):
+    response = err.get_response()
+    print('response', err, err.get_response())
+    response.data = dumps({
+        "code": err.code,
+        "name": "System Error",
+        "message": err.get_description(),
+    })
+    response.content_type = 'application/json'
+    return response
+
+APP = Flask(__name__)
+CORS(APP)
+
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
+APP.register_error_handler(Exception, defaultHandler)
+
+
+
 
 ######################################################
 
@@ -50,11 +68,14 @@ def verify_wellformedness_invoice():
 def verify_syntax():
     data = request.data
     resp = verify_syntax_errors(data)
-    report = compile_report(resp, wellformedness = False, syntax = True, peppol = False, schema = False) 
+    report = compile_report(resp, syntax = True) 
     return dumps(
      report
     )   
 
+# All peppol functions in main will be commented out until either a requirements.txt file
+# is made or to sort out dependencies and the form of ubl invoice can be confirmed to be UBL 2.1
+'''
 # PEPPOL
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
@@ -77,9 +98,10 @@ def verify_peppol():
             broken_rules.remove(None)
     except ValueError:
         pass
-
-    return dumps(broken_rules)
-
+    
+    report = compile_report(broken_rules, peppol = True) 
+    return dumps(report)
+'''
 
 # Schema
 @APP.route("/invoice/verify/schema", methods=['GET'])
@@ -92,14 +114,14 @@ def verify_schema():
 
 # all
 @APP.route("/invoice/verify/all", methods=['GET', 'POST'])
-def verify_alll():
+def verify_all():
     data = request.data
-    resp = verify_syntax_errors(data)
-    report = compile_report(resp, wellformedness = False, syntax = True, peppol = False, schema = False) 
 
     resp = verify_wellformedness(data)
-
-    report = compile_report(resp,wellformedness = True, syntax = False, peppol = False, schema = False)
+    report = compile_report(resp,wellformedness = True)
+    
+    resp = verify_syntax_errors(data)
+    report = compile_report(resp,syntax = True) 
 
     return dumps(
      report

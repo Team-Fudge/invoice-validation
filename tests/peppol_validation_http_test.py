@@ -1,3 +1,4 @@
+'''
 import pytest
 import requests
 import json
@@ -74,3 +75,4 @@ def test_valid_xml():
     assert data.status_code == 200
     assert json_data == []
 
+'''

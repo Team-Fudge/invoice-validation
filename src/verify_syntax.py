@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from src.error import InputError, AccessError
 import re
 import os
 
@@ -44,7 +45,7 @@ def verify_syntax_errors(string_xml):
     disclaimer = "The current version of this microservice can only test syntax errors BR-01 to BR-16"
     
     if len(string_xml) == 0:
-        return {"broken_rules": "The provided file is empty", "broken_rules_detailed": "The provided file is empty", "disclaimer": disclaimer}
+        raise InputError("No file recieved")
     
     unchecked = 1
     
