@@ -32,9 +32,6 @@ joblib==0.13.0
 jsonschema==2.6.0
 jupyter-client==5.3.4
 jupyter-core==4.6.1
-Keras==2.2.4
-Keras-Applications==1.0.8
-Keras-Preprocessing==1.1.0
 keyring==10.1
 keyrings.alt==3.1.1
 kiwisolver==1.0.1
@@ -118,11 +115,6 @@ sortedcontainers==2.3.0
 soupsieve==1.8
 SQLAlchemy==1.2.18
 tabulate==0.8.2
-tensorboard==2.8.0
-tensorboard-data-server==0.6.1
-tensorboard-plugin-wit==1.8.1
-tensorflow==2.8.0
-tensorflow-io-gcs-filesystem==0.24.0
 termcolor==1.1.0
 terminado==0.8.1
 testpath==0.4.2
