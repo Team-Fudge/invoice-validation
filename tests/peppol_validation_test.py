@@ -1,3 +1,4 @@
+'''
 from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_base_amount_and_percentage, check_gross_net_amount, check_xml_empty
 from src.error import InputError
 import pytest
@@ -57,3 +58,5 @@ def test_valid_invoic():
     string_xml = open_file("tests/exmaple_invoice.xml")
     # Valid invoice
     assert(check_gross_net_amount(string_xml) == None)
+
+'''

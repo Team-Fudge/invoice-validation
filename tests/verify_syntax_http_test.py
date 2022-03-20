@@ -18,7 +18,7 @@ def verify_syntax_request(invoice):
     return requests.post(config.url + 'invoice/verify/syntax', data = invoice, headers = headers)
 
 def test_empty_xml_type():
-    assert verify_syntax_request('''''').status_code == 200
+    assert verify_syntax_request('''''').status_code == 400
     assert isinstance(verify_syntax_request('''''').json(), dict)
 
 def test_bad_xml_type():
