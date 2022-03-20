@@ -1,1 +1,1 @@
-web: python3 server.py
+web: gunicon src.server:app
