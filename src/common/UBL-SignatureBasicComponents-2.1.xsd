@@ -1,18 +1,19 @@
 <!-- 
-  Library:           OASIS Universal Business Language (UBL) 2.1
+  Library:           OASIS Universal Business Language (UBL) 2.1 OS
                      http://docs.oasis-open.org/ubl/os-UBL-2.1/
-  Module:            UBL-SignatureBasicComponents-2.1.xsd
-  Generated on:      2010-08-29 00:10(UTC)
-
-  This schema fragment defines the signature constructs used in the
-  standardized extension.
+  Release Date:      04 November 2013
+  Module:            xsd/common/UBL-SignatureBasicComponents-2.1.xsd
+  Generated on:      2013-10-31 17:18z
+  Copyright (c) OASIS Open 2013. All Rights Reserved.
  -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:oasis:names:specification:ubl:schema:xsd:SignatureBasicComponents-2" xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" targetNamespace="urn:oasis:names:specification:ubl:schema:xsd:SignatureBasicComponents-2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1">
-<!--  ===== Import =====  -->
+<xsd:schema xmlns="urn:oasis:names:specification:ubl:schema:xsd:SignatureBasicComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2" xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:oasis:names:specification:ubl:schema:xsd:SignatureBasicComponents-2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1">
+<!--  ===== Imports =====  -->
+<xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2" schemaLocation="UBL-QualifiedDataTypes-2.1.xsd"/>
 <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" schemaLocation="UBL-UnqualifiedDataTypes-2.1.xsd"/>
 <!--  ===== Element Declarations =====  -->
 <xsd:element name="ReferencedSignatureID" type="ReferencedSignatureIDType"/>
 <!--  ===== Type Definitions =====  -->
+<!--  ===== Basic Business Information Entity Type Definitions =====  -->
 <xsd:complexType name="ReferencedSignatureIDType">
 <xsd:simpleContent>
 <xsd:extension base="udt:IdentifierType"/>
@@ -41,8 +42,6 @@
   implement this specification. Please address the information to the 
   OASIS Executive Director.
   
-  Copyright (C) OASIS Open 2001-2010. All Rights Reserved.
-
   This document and translations of it may be copied and furnished to 
   others, and derivative works that comment on or otherwise explain 
   it or assist in its implementation may be prepared, copied, 
@@ -66,5 +65,5 @@
   WARRANTY THAT THE USE OF THE INFORMATION HEREIN 
   WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED 
   WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A 
-  PARTICULAR PURPOSE.
+  PARTICULAR PURPOSE.    
  -->
