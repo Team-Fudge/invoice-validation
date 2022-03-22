@@ -1,9 +1,12 @@
-'''
+
 import sys
 from bs4 import BeautifulSoup
 import datetime
 import iso4217
 from src.error import InputError, AccessError
+
+
+broken_rules = []
 
 # Checks if the date format is in YYYY-MM-DD
 def date_time_check_format(date_text):
@@ -27,14 +30,15 @@ def check_xml_empty(string_xml):
 def check_reference_number(string_xml):
 
     # bs_content = parse_xml_file(file_name)
-    bs_content = BeautifulSoup(string_xml, "lxml")
+    bs_content = BeautifulSoup(string_xml, "xml")
 
-    order_ref_result = bs_content.find_all("orderreference")
-    biller_ref_result = bs_content.find_all("billersorderreference")
-    payment_ref_result = bs_content.find_all("paymentreference")
+    buyer_reference = bs_content.find_all("BuyerReference")
+    purchase_reference = bs_content.find_all("PurchaseReference")
 
-    if order_ref_result == [] or biller_ref_result == [] or payment_ref_result == []:
-        return {'broken_rule' : "PEPPOL - EN16931 - R003", "broken_rule_detailed" : "A buyer reference or purchase order reference MUST be provided"}
+    if buyer_reference == [] and purchase_reference == []:
+        broken_rule =  {'broken_rule' : "PEPPOL - EN16931 - R003", "broken_rule_detailed" : "A buyer reference or purchase order reference MUST be provided"}
+        broken_rules.append(broken_rule)
+        return broken_rule
 
     return None
 
@@ -42,49 +46,37 @@ def check_reference_number(string_xml):
 def check_date_syntax(string_xml):
 
     # bs_content = parse_xml_file(file_name)
-    bs_content = BeautifulSoup(string_xml, "lxml")
+    bs_content = BeautifulSoup(string_xml, "xml")
 
-    date_result = bs_content.find_all("date")
-    invoice_date_result = bs_content.find_all("invoicedate")
-    ref_date_result = bs_content.find_all("referencedate")
-    
+    date_result = bs_content.find_all("IssueDate")
     date_result_flag = True
-    invoice_date_result_flag = True
-    ref_date_result_flag = True
 
     # check if tags named date are in form YYYY-MM-DD 
     for date in date_result:
-        if date_time_check_format(date.get_text()) == False:
+        if date_time_check_format(date.string) == False:
             date_result_flag = False
 
-    # check if tags named invoice date are in form YYYY-MM-DD 
-    for date in invoice_date_result:
-        if date_time_check_format(date.get_text()) == False:
-            invoice_date_result_flag = False
-        
-
-    # check if tags named refernce date are in form YYYY-MM-DD 
-    for date in ref_date_result:
-        if date_time_check_format(date.get_text()) == False:
-            ref_date_result_flag == False
-
-    if date_result_flag == False or invoice_date_result_flag == False or ref_date_result_flag == False:
-        return {'broken_rule' : "PEPPOL - EN16931 - F001", "broken_rule_detailed" : "A date MUST be formatted YYYY-MM-DD"}
+    if date_result_flag == False:
+        broken_rule = {'broken_rule' : "PEPPOL - EN16931 - F001", "broken_rule_detailed" : "A date MUST be formatted YYYY-MM-DD"}
+        broken_rules.append(broken_rule)
+        return broken_rule
 
     return None
 
 # Checking if currency code is valid (PEPPOL - EN16931 - CL007)
-def check_currency_Code(string_xml):
+def check_currency_Code(string_xml): #check this
 
     # bs_content = parse_xml_file(file_name)
-    bs_content = BeautifulSoup(string_xml, "lxml")
+    bs_content = BeautifulSoup(string_xml, "xml")
 
-    Currency_result = bs_content.find_all("invoice")
-    currency_code = Currency_result[0]["invoicecurrency"]
-    currency_code = currency_code.lower()
-
+    Currency_result = bs_content.find_all("DocumentCurrencyCode")
+    currency_code = Currency_result[0].string
+    currency_code = str(currency_code).lower()
+   
     if currency_code not in dir(iso4217.Currency):
-        return {'broken_rule' : "PEPPOL - EN16931 - CL007", "broken_rule_detailed" : "Currency code must be according to ISO 4217:2005"}
+        broken_rule = {'broken_rule' : "PEPPOL - EN16931 - CL007", "broken_rule_detailed" : "Currency code must be according to ISO 4217:2005"}
+        broken_rules.append(broken_rule)
+        return broken_rule
 
     return None
 
@@ -92,60 +84,67 @@ def check_currency_Code(string_xml):
 def check_if_buyer_seller_address_exists(string_xml):
 
     # bs_content = parse_xml_file(file_name)
-    bs_content = BeautifulSoup(string_xml, "lxml")
-    InvoiceRecipient_result = bs_content.find_all("invoicerecipient")
-    Biller_result = bs_content.find_all("biller")
+    bs_content = BeautifulSoup(string_xml, "xml")
+    PostalAddress_result = bs_content.find_all("PostalAddress")
+    print(PostalAddress_result)
 
-    for tag in  InvoiceRecipient_result:
-        str_tag = str(tag)
-        if "<address>" not in str_tag:
-            return {'broken_rule' : "PEPPOL - EN16931 - R010", "broken_rule_detailed" : "Buyer electronic address MUST be provided"}
+    if PostalAddress_result == []: 
+        broken_rule = {'broken_rule' : "PEPPOL - EN16931 - R010", "broken_rule_detailed" : "Buyer electronic address MUST be provided"}
+        broken_rules.append(broken_rule)
+        return broken_rule
             
-    for tag in  Biller_result:
-        str_tag = str(tag)
-        if "<address>" not in str_tag:
-            return {'broken_rule' : "PEPPOL - EN16931 - R020", "broken_rule_detailed" : "Seller electronic address MUST be provided"}
-
     return None
 
-# Checking if base amount and percentage and amount have the correct relationship (PEPPOL - EN16931 - R040)
-def check_base_amount_and_percentage(string_xml):
+# Checking if only one tax total is provided (PEPPOL - EN16931 - R053)
+
+def check_if_one_tax_total_is_provided(string_xml):
 
     # bs_content = parse_xml_file(file_name)
-    bs_content = BeautifulSoup(string_xml, "lxml")
-    all_base_amounts = bs_content.find_all("baseamount")
-    all_percentage = bs_content.find_all("percentage")
-    all_amounts = bs_content.find_all("amount")
+    bs_content = BeautifulSoup(string_xml, "xml")
+    taxtotal_result = bs_content.find_all("TaxTotal")
+    taxsubtotal_result = bs_content.find_all("TaxSubtotal")
 
-    for index in range(len(all_base_amounts)):
-
-        int_all_base_amounts = float("{:.2f}".format(float(all_base_amounts[index].get_text()))) # getting base amount
-        int_all_percentage = float(list(all_base_amounts[index].next_siblings)[1].get_text()) # getting percentage
-        int_all_amounts = float(list(all_base_amounts[index].next_siblings)[3].get_text()) # getting percentage
-
-        if float("{:.2f}".format(int_all_base_amounts * (int_all_percentage/100))) != int_all_amounts: # checking peppol rule
-            return {'broken_rule' : "PEPPOL - EN16931 - R040", "broken_rule_detailed" : "Allowance/charge amount must equal base amount * percentage/100 if base amount and percentage exists"} 
-
+    if taxtotal_result == [] or taxsubtotal_result == []:
+        broken_rule = {'broken_rule' : "PEPPOL - EN16931 - R053", "broken_rule_detailed" : "Only one tax total with tax subtotals MUST be provided"}
+        broken_rules.append(broken_rule)
+        return broken_rule
+            
     return None
 
-# Checking if gross_amount - prepaid_amount = payable_amount  (PEPPOL - EN16931 - R046)
-def check_gross_net_amount(string_xml):
+#  Checking if Base quantity MUST be a positive number abover 0
+def check_if_base_quantity_is_positive_number(string_xml):
 
     # bs_content = parse_xml_file(file_name)
-    bs_content = BeautifulSoup(string_xml, "lxml")
-    gross_amount = bs_content.find("totalgrossamount")
-    prepaid_amount = bs_content.find("prepaidamount")
-    payable_amount = bs_content.find("payableamount")
+    bs_content = BeautifulSoup(string_xml, "xml")
+    basequantity_result = bs_content.find_all("BaseQuantity")
 
-    int_gross_amount = float(gross_amount.get_text())
-    int_prepaid_amount = float(prepaid_amount.get_text())
-    int_payable_amount = float(payable_amount.get_text())
+    basequantity_val = basequantity_result[0].string
+    float_basequantity = float(basequantity_val)
 
-    if (int_gross_amount - int_prepaid_amount != int_payable_amount):
-        return {'broken_rule' : "PEPPOL - EN16931 - R046", "broken_rule_detailed" : "Item net price MUST equal (Gross price - Allowance amount) when gross price is provided."} 
+    if float_basequantity < 0: 
+        broken_rule = {'broken_rule' : "PEPPOL - EN16931 - R121", "broken_rule_detailed" : "Base quantity MUST be a positive number abover 0"}
+        broken_rules.append(broken_rule)
+        return broken_rule
+            
+    return None
 
-    return None 
+def check_valid(string_xml):
 
+    global broken_rules
+    broken_rules = []
+
+    check_reference_number(string_xml)
+    check_date_syntax(string_xml)
+    check_currency_Code(string_xml)
+    check_if_buyer_seller_address_exists(string_xml)
+    check_if_one_tax_total_is_provided(string_xml)
+    check_if_base_quantity_is_positive_number(string_xml)
+
+    return broken_rules
+
+def empty_broken_rules():
+    global broken_rules
+    broken_rules = []
 
 if __name__ == "__main__":
     invoice_file = "empty_xml.xml"
@@ -153,4 +152,4 @@ if __name__ == "__main__":
 
     
 
-'''
+
