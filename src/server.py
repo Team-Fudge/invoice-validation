@@ -11,7 +11,7 @@ from src.error import InputError
 from src.error import AccessError
 
 # Functions
-import src.schema_validation
+from src.schema_validation import verify_schema
 from src.verify_syntax import verify_syntax_errors
 from src.wellformedness import verify_wellformedness
 from src.helper import compile_report
@@ -104,12 +104,14 @@ def verify_peppol():
 '''
 
 # Schema
-@APP.route("/invoice/verify/schema", methods=['GET'])
-def verify_schema():
-    data = request.args.get('data')
-    return dumps({
-        # report
-    })
+@APP.route("/invoice/verify/schema", methods=['GET', 'POST'])
+def verify_schema_xml():
+    data = request.data
+    resp = verify_schema(data)
+    report = compile_report(resp, schema = True) 
+    return dumps(
+     report
+    )
 
 
 # all
@@ -121,7 +123,10 @@ def verify_all():
     report = compile_report(resp,wellformedness = True)
     
     resp = verify_syntax_errors(data)
-    report = compile_report(resp,syntax = True) 
+    report = compile_report(resp,syntax = True)
+
+    resp = verify_schema(data)
+    report = compile_report(resp,schema = True) 
 
     return dumps(
      report
@@ -135,7 +140,7 @@ def active():
         'wellformedness_validator_active': True,
         'syntax_validator_active': True,
         'PEPPOL_validator_active': True,
-        'schema_validator_active': False,
+        'schema_validator_active': True,
     })
 
 if __name__ == "__main__":
