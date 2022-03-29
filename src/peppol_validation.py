@@ -143,6 +143,7 @@ def check_valid(string_xml):
     global broken_rules
     broken_rules = []
 
+    check_xml_empty(string_xml)
     check_reference_number(string_xml)
     check_date_syntax(string_xml)
     check_currency_Code(string_xml)

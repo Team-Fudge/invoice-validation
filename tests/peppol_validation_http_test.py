@@ -1,4 +1,3 @@
-'''
 import pytest
 import requests
 import json
@@ -13,66 +12,23 @@ def open_file_as_string(file_name):
 
     return data
 
-# def test_empty_xml_file():
+def test_empty_xml_type():
 
-#     string_xml = open_file_as_string("tests/empty_xml.xml")
-#     data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-#     assert data.json() == 0
-    
-def test_no_currency_code_xml():
-
-    string_xml = open_file_as_string("tests/example_invoice_currency_code.xml")
+    string_xml = open_file_as_string("example_empty.xml")
     data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
-    assert data.status_code == 200
-    assert json_data == [{'broken_rule': 'PEPPOL - EN16931 - CL007', 'broken_rule_detailed': 'Currency code must be according to ISO 4217:2005'}]
-    
-def test_incorrect_date_syntax():
+    assert data.status_code == 400
+    assert isinstance(data.json(), dict)
 
-    string_xml = open_file_as_string("tests/example_invoice_wrong_date_syntax.xml")
+def test_incorrect_xml():
+
+    string_xml = open_file_as_string("peppol_incorrect.xml")
     data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
     assert data.status_code == 200
-    assert json_data == [{'broken_rule' : "PEPPOL - EN16931 - F001", "broken_rule_detailed" : "A date MUST be formatted YYYY-MM-DD"}]
+    assert isinstance(data.json(),dict)
 
-def test_no_address_in_xml():
+def test_correct_xml_type():
 
-    string_xml = open_file_as_string("tests/example_invoice_no_address.xml")
+    string_xml = open_file_as_string("example_good.xml")
     data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
     assert data.status_code == 200
-    assert json_data == [{'broken_rule' : "PEPPOL - EN16931 - R010", "broken_rule_detailed" : "Buyer electronic address MUST be provided"}]
-
-def test_incorrect_baseamount_percentage_etc_in_xml():
-
-    string_xml = open_file_as_string("tests/example_invoice_invalid_percentage_baseamount.xml")
-    data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
-    assert data.status_code == 200
-    assert json_data == [{'broken_rule' : "PEPPOL - EN16931 - R040", "broken_rule_detailed" : "Allowance/charge amount must equal base amount * percentage/100 if base amount and percentage exists"}]
-
-def test_check_gross_net_amount_in_xml():
-
-    string_xml = open_file_as_string("tests/example_invoice_invalid_gross_net_price.xml")
-    data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
-    assert data.status_code == 200
-    assert json_data == [{'broken_rule' : "PEPPOL - EN16931 - R046", "broken_rule_detailed" : "Item net price MUST equal (Gross price - Allowance amount) when gross price is provided."}]
-
-def test_no_reference_in_xml():
-
-    string_xml = open_file_as_string("tests/example_invoice_no_ref_number.xml")
-    data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
-    assert data.status_code == 200
-    assert json_data == [{'broken_rule' : "PEPPOL - EN16931 - R003", "broken_rule_detailed" : "A buyer reference or purchase order reference MUST be provided"}]
-
-def test_valid_xml():
-
-    string_xml = open_file_as_string("tests/exmaple_invoice.xml")
-    data = requests.post(config.url + '/invoice/verify/peppol', data = string_xml)
-    json_data = data.json()
-    assert data.status_code == 200
-    assert json_data == []
-
-'''
+    assert isinstance(data.json(),dict)
