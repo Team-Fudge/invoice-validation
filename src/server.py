@@ -16,6 +16,7 @@ from src.verify_syntax import verify_syntax_errors
 from src.wellformedness import verify_wellformedness
 from src.helper import compile_report
 from src.register import auth_register
+from src.clear import clear
 ######################################################
 
 def quit_gracefully(*args):
@@ -56,6 +57,12 @@ def echo():
     return dumps({
         'data': data
     })
+
+# Clear
+@APP.route('/clear', methods=['DELETE'])
+def clear_data():
+    resp = clear()
+    return dumps(resp)
 
 # Register
 @APP.route("/auth/register", methods=['POST'])

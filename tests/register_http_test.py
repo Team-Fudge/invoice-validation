@@ -3,6 +3,7 @@ import json
 from flask.globals import request
 import requests
 from src import config
+from src.data_store import data_store
 
 def auth_register_request(email, password, name_first, name_last):
     return requests.post(config.url + 'auth/register', json={
@@ -11,6 +12,14 @@ def auth_register_request(email, password, name_first, name_last):
         'name_first': name_first,
         'name_last': name_last
     })
+
+def clear_request():
+    return requests.delete(config.url + 'clear', params={})
+
+@pytest.fixture(autouse=True)
+def clear():
+	clear_request()
+	pass
 
 '''
 def auth_login_request(email, password):
@@ -25,6 +34,21 @@ def test_valid_register():
 	assert register['user_id'] == login['user_id']
 	assert register['token'] != login['token']
 '''
+def test_user_token_unique():
+    
+    used_tokens = set()
+
+    data = auth_register_request("user1@mail.com", "password", "firstname", "lastname").json()
+    assert data['token'] not in used_tokens
+    used_tokens.add(data['token'])
+
+    data = auth_register_request("user2@mail.com", "password", "firstname", "lastname").json()
+    assert data['token'] not in used_tokens
+    used_tokens.add(data['token'])
+
+    data = auth_register_request("user3@mail.com", "password", "firstname", "lastname").json()
+    assert data['token'] not in used_tokens
+    used_tokens.add(data['token'])
 
 def test_user_id():
 
@@ -39,6 +63,13 @@ def test_user_id():
     assert data['user_id'] not in used_ids
     used_ids.add(data['user_id'])
 
+# Valid registration
+def test_valid_registration():
+    assert auth_register_request("user3@gmail.com", "password", "firstname", "lastname").status_code == 200
+    store = data_store.get()
+    print(store['users'])
+    print("hello")
+    
 # invalid registrations
 
 def test_invalid_email():
