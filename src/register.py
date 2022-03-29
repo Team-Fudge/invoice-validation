@@ -6,7 +6,6 @@ import secrets
 
 from src.data_store import data_store
 from src.error import AccessError, InputError
-from src.validation import valid_token, email_is_valid
 from src import config
 
 SECRET = "s9sDjkDJA8"
