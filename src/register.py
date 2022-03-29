@@ -43,7 +43,7 @@ def email_is_valid(email):
     pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'
     return True if re.fullmatch(pattern, email) else False
 
-def auth_register_v1(email, password, name_first, name_last):
+def auth_register(email, password, name_first, name_last):
     
     name_first = name_first.lower()
     name_last = name_last.lower()
@@ -83,7 +83,9 @@ def auth_register_v1(email, password, name_first, name_last):
 
     #Add password to data store
     hashed_pword = hashlib.sha256(password.encode()).hexdigest()
-    store['passwords'].append(hashed_pword) 
+    store['passwords'].append(hashed_pword)
+    
+    data_store.set(store)
 
     return {
         'user_id': u_id,

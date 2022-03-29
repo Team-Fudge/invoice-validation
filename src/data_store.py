@@ -7,7 +7,15 @@ initial_object = {
     # User contains: u_id, email, name_first, name_last
     'users': [],
     # List of passwords, indexed by ID
-    'passwords': []
+    'passwords': [],
+    
+    # List of session_id's (integers)
+    # Each corresponds with the session_id of an active token
+    'sessions': [],
+
+    # ID to give to the next session (so that IDs aren't reused)
+    # Increment after use
+    'curr_session_id': 0
 }
 
 

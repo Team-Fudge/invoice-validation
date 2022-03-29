@@ -12,6 +12,7 @@ def auth_register_request(email, password, name_first, name_last):
         'name_last': name_last
     })
 
+'''
 def auth_login_request(email, password):
     return requests.post(config.url + 'auth/login', json={
         'email': email,
@@ -23,7 +24,8 @@ def test_valid_register():
 	login = auth_login_request("user@gmail.com", "password").json()
 	assert register['user_id'] == login['user_id']
 	assert register['token'] != login['token']
- 
+'''
+
 def test_user_id():
 
     # Set created for used ids
@@ -33,7 +35,7 @@ def test_user_id():
     assert data['user_id'] not in used_ids
     used_ids.add(data['user_id'])
 
-    data = auth_register_v2_request("user2@gmail.com", "password123", "firstname", "lastname").json()
+    data = auth_register_request("user2@gmail.com", "password123", "firstname", "lastname").json()
     assert data['user_id'] not in used_ids
     used_ids.add(data['user_id'])
 

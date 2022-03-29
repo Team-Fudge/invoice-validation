@@ -15,6 +15,7 @@ from src.schema_validation import verify_schema
 from src.verify_syntax import verify_syntax_errors
 from src.wellformedness import verify_wellformedness
 from src.helper import compile_report
+from src.register import auth_register
 ######################################################
 
 def quit_gracefully(*args):
@@ -55,6 +56,13 @@ def echo():
     return dumps({
         'data': data
     })
+
+# Register
+@APP.route("/auth/register", methods=['POST'])
+def auth_register_user():
+    data = request.get_json()
+    resp = auth_register(data['email'], data['password'], data['name_first'], data['name_last'])
+    return dumps(resp)
 
 # Wellformedness
 @APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
