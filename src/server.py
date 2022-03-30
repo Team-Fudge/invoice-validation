@@ -4,7 +4,7 @@ from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 from src import config
-#from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_base_amount_and_percentage, check_gross_net_amount, check_xml_empty
+from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_xml_empty, check_if_one_tax_total_is_provided, check_if_base_quantity_is_positive_number, check_valid
 
 # Errors
 from src.error import InputError
@@ -16,6 +16,7 @@ from src.verify_syntax import verify_syntax_errors
 from src.wellformedness import verify_wellformedness
 from src.helper import compile_report
 from src.register import auth_register
+from src.login import auth_login
 from src.clear import clear
 ######################################################
 
@@ -44,8 +45,6 @@ APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
 
-
-
 ######################################################
 
 # example
@@ -71,6 +70,13 @@ def auth_register_user():
     resp = auth_register(data['email'], data['password'], data['name_first'], data['name_last'])
     return dumps(resp)
 
+# Login
+@APP.route("/auth/login", methods=['POST'])
+def auth_login_user():
+    data = request.get_json()
+    resp = auth_login(data['email'], data['password'])
+    return dumps(resp)
+
 # Wellformedness
 @APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
 def verify_wellformedness_invoice():
@@ -90,33 +96,29 @@ def verify_syntax():
 
 # All peppol functions in main will be commented out until either a requirements.txt file
 # is made or to sort out dependencies and the form of ubl invoice can be confirmed to be UBL 2.1
-'''
+
 # PEPPOL
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
 
     xml_file = request.data
-    broken_rules = []
+    broken_ruless = []
 
     # Validating all Rules
-    broken_rules.append(check_xml_empty(xml_file))
-    broken_rules.append(check_reference_number(xml_file))
-    broken_rules.append(check_date_syntax(xml_file))
-    broken_rules.append(check_currency_Code(xml_file))
-    broken_rules.append(check_if_buyer_seller_address_exists(xml_file))
-    broken_rules.append(check_base_amount_and_percentage(xml_file))
-    broken_rules.append(check_gross_net_amount(xml_file))
+    broken_ruless = check_valid(xml_file)
    
     # Getting rid of all None elements in the broken rules 
     try:
         while True:
-            broken_rules.remove(None)
+            broken_ruless.remove(None)
     except ValueError:
         pass
+
+    dict_broken_rules = {"broken_rules": broken_ruless}
     
-    report = compile_report(broken_rules, peppol = True) 
+    report = compile_report(dict_broken_rules, peppol = True) 
     return dumps(report)
-'''
+
 
 # Schema
 @APP.route("/invoice/verify/schema", methods=['GET', 'POST'])
