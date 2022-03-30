@@ -3,6 +3,7 @@ import signal
 from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
+import requests
 from src import config
 from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_xml_empty, check_if_one_tax_total_is_provided, check_if_base_quantity_is_positive_number, check_valid
 
@@ -17,6 +18,7 @@ from src.wellformedness import verify_wellformedness
 from src.helper import compile_report
 from src.register import auth_register
 from src.login import auth_login
+from src.logout import auth_logout
 from src.clear import clear
 ######################################################
 
@@ -75,6 +77,13 @@ def auth_register_user():
 def auth_login_user():
     data = request.get_json()
     resp = auth_login(data['email'], data['password'])
+    return dumps(resp)
+
+# Logout
+@APP.route("/auth/logout", methods=['POST'])
+def auth_logout_user():
+    data = request.get_json()
+    resp = auth_logout(data['token'])
     return dumps(resp)
 
 # Wellformedness
