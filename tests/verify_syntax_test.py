@@ -30,3 +30,5 @@ def test_output_empty_xml():
     with pytest.raises(InputError):
         verify_syntax_errors(open_file_as_string("example_empty.xml"))
 
+def test_no_invoice_line():
+    assert(verify_syntax_errors(open_file_as_string("example_invoice_no_invoice_line.xml")) == {"broken_rules": ['BR-16'], "broken_rules_detailed": ['[BR-16]-An Invoice shall have at least one Invoice line (BG-25)'], "disclaimer": 'The current version of this microservice can only test syntax errors BR-01 to BR-16'})

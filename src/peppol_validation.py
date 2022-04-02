@@ -157,10 +157,6 @@ def empty_broken_rules():
     global broken_rules
     broken_rules = []
 
-if __name__ == "__main__":
-    invoice_file = "empty_xml.xml"
-    check_xml_empty(invoice_file)
-
     
 
 

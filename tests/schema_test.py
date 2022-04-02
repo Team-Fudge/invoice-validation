@@ -29,3 +29,6 @@ def test_output_incorrect_xml():
     assert(verify_schema(open_file_as_string("schema_incorrect.xml")) == {'broken_rules': ['Invoice - This element MUST be conveyed as the root element in any instance document based on this Schema expression', 
                                                                                            'cbc:UBLVersionID - Identifies the earliest version of the UBL 2 schema for this document type that defines all of the elements that might be encountered in the current instance.',
                                                                                            'cbc:IssueDate - The date, assigned by the sender, on which this document was issued.']})
+
+def test_output_duplicate_accounting_supplier():
+    assert(verify_schema(open_file_as_string("duplicate_accounting_supplier_tag.xml")) == {'broken_rules': ['cac:AccountingSupplierParty - The accounting supplier party.']})
