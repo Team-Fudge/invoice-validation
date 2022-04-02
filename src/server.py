@@ -89,15 +89,17 @@ def auth_logout_user():
 # Wellformedness
 @APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
 def verify_wellformedness_invoice():
+    token = request.args.get('token')
     data = request.data
-    resp = verify_wellformedness(data)
+    resp = verify_wellformedness(token, data)
     return dumps(resp)
 
 # Syntax
 @APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
+    token = request.args.get('token')
     data = request.data
-    resp = verify_syntax_errors(data)
+    resp = verify_syntax_errors(token, data)
     report = compile_report(resp, syntax = True) 
     return dumps(
      report

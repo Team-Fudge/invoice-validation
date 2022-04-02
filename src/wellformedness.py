@@ -1,10 +1,18 @@
+import hashlib
+import jwt
+import secrets
+import src
 
 from lxml import etree
 from lxml.etree import fromstring
 from src.error import InputError, AccessError
+from src.helper import valid_token, valid_user_id
 
-def verify_wellformedness(invoice_file):
-
+def verify_wellformedness(token, invoice_file):
+    
+    if not valid_token(token):
+    	raise AccessError(description='Invalid token')
+    
     if not invoice_file:
         raise InputError("No invoice provided")
     
@@ -22,3 +30,5 @@ def verify_wellformedness(invoice_file):
             error_line = ("ERROR ON LINE %s: %s" % (error.line, error.message))
             broken_rules.append(error_line)
         return {"broken_rules": broken_rules}
+    
+    return {}

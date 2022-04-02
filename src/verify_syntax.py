@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from src.error import InputError, AccessError
 import re
 import os
+from src.helper import valid_token, valid_user_id
 
 def open_file_as_string(file_name):
 
@@ -41,7 +42,12 @@ def check_section_exists(string_xml, tag, index):
     value = value.replace(" ","")
     return value
 
-def verify_syntax_errors(string_xml):
+def verify_syntax_errors(token, string_xml):
+   
+    if not valid_token(token):
+         raise AccessError(description='Invalid token')
+   
+   
     disclaimer = "The current version of this microservice can only test syntax errors BR-01 to BR-16"
     
     if len(string_xml) == 0:

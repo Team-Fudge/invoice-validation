@@ -1,4 +1,15 @@
 from datetime import datetime
+
+import hashlib
+import jwt
+import secrets
+import src
+
+from src.data_store import data_store
+from src.error import AccessError, InputError
+from src.register import SECRET
+
+
 def compile_report(test_result,
                      wellformedness = False, 
                      syntax = False, 
@@ -45,4 +56,33 @@ def compile_report(test_result,
         return report
     else:
         return
-        
+
+
+
+def valid_user_id(u_id):
+    store = data_store.get()
+    return any(u['u_id'] == u_id for u in store['users'])
+
+def valid_token(token):
+    store = data_store.get()
+    sessions = store['sessions']
+
+    try:
+        decoded_jwt = jwt.decode(token, src.register.SECRET, algorithms=['HS256']) 
+    except Exception:
+        print("Could not decode token")
+        return False
+    except jwt.ExpiredSignatureError as timeout:
+        raise AccessError('Unfortunately your user session has expired. Please Log in again!')
+    
+    u_id = decoded_jwt['u_id']
+    s_id = decoded_jwt['s_id']
+    
+
+    # Is the user valid?
+    if not valid_user_id(u_id):
+        print(f"Invalid UID {u_id}")
+        return False
+    
+    # Is the session valid?
+    return any(s == s_id for s in sessions)
