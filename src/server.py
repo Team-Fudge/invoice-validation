@@ -111,13 +111,14 @@ def verify_syntax():
 # PEPPOL
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
-
+    
+    token = request.args.get('token')
     xml_file = request.data
     broken_ruless = []
 
     # Validating all Rules
-    broken_ruless = check_valid(xml_file)
-   
+    broken_ruless = check_valid(token, xml_file)
+
     # Getting rid of all None elements in the broken rules 
     try:
         while True:
@@ -127,33 +128,35 @@ def verify_peppol():
 
     dict_broken_rules = {"broken_rules": broken_ruless}
     
-    report = compile_report(dict_broken_rules, peppol = True) 
+    report = compile_report(token, dict_broken_rules, peppol = True) 
     return dumps(report)
 
 
 # Schema
 @APP.route("/invoice/verify/schema", methods=['GET', 'POST'])
 def verify_schema_xml():
+    token = request.args.get('token')
     data = request.data
-    resp = verify_schema(data)
-    report = compile_report(resp, schema = True) 
+    resp = verify_schema(token, data)
+    report = compile_report(resp, syntax = True)
     return dumps(
      report
-    )
+    ) 
 
 
 # all
 @APP.route("/invoice/verify/all", methods=['GET', 'POST'])
 def verify_all():
+    token = request.args.get('token')
     data = request.data
 
-    resp = verify_wellformedness(data)
+    resp = verify_wellformedness(token, data)
     report = compile_report(resp,wellformedness = True)
     
-    resp = verify_syntax_errors(data)
+    resp = verify_syntax_errors(token, data)
     report = compile_report(resp,syntax = True)
 
-    resp = verify_schema(data)
+    resp = verify_schema(token, data)
     report = compile_report(resp,schema = True) 
 
     return dumps(

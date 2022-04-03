@@ -3,6 +3,7 @@ import sys
 from bs4 import BeautifulSoup
 import datetime
 from src.error import InputError, AccessError
+from src.helper import valid_token, valid_user_id
 
 broken_rules = []
 currency_codes = ['aed', 'afn', 'all', 'amd', 'ang', 'aoa', 'ars', 'aud', 'awg', 'azn', 'bam', 'bbd', 
@@ -137,8 +138,11 @@ def check_if_base_quantity_is_positive_number(string_xml):
             
     return None
 
-def check_valid(string_xml):
-
+def check_valid(token, string_xml):
+    
+    if not valid_token(token):
+        raise AccessError(description='Invalid token')
+    
     global broken_rules
     broken_rules = []
 

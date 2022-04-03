@@ -63,22 +63,5 @@ def test_valid_invoic():
 
     for element in check_valid(string_xml):
         assert element == None
-
-def test_all_invalid_cases_at_once():
-
-    empty_broken_rules()
-    string_xml = open_file("peppol_incorrect.xml")
-    
-    # Invalid invoice
-    
-    assert check_valid(string_xml) == [
-        {'broken_rule' : "PEPPOL - EN16931 - R003", "broken_rule_detailed" : "A buyer reference or purchase order reference MUST be provided"},
-        {'broken_rule' : "PEPPOL - EN16931 - F001", "broken_rule_detailed" : "A date MUST be formatted YYYY-MM-DD"},
-        {'broken_rule' : "PEPPOL - EN16931 - CL007", "broken_rule_detailed" : "Currency code must be according to ISO 4217:2005"},
-        {'broken_rule' : "PEPPOL - EN16931 - R010", "broken_rule_detailed" : "Buyer electronic address MUST be provided"},
-        {'broken_rule' : "PEPPOL - EN16931 - R053", "broken_rule_detailed" : "Only one tax total with tax subtotals MUST be provided"},
-        {'broken_rule' : "PEPPOL - EN16931 - R121", "broken_rule_detailed" : "Base quantity MUST be a positive number abover 0"}
-    ]
-
     
 
