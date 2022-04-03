@@ -2,6 +2,7 @@ import sys
 import signal
 from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
+import simplejson as json
 from flask_cors import CORS
 import requests
 from src import config
@@ -184,9 +185,10 @@ def active():
 
 @APP.route("/invoice/create", methods=['GET', 'POST'])
 def create_invoice():
-    json_data = request.data
-    resp = requests.post('https://seng-donut-frontend.azurewebsites.net/json/convert', data=json_data)
-    return dumps(resp)
+    json_data = request.get_json()
+    url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
+    resp = requests.post(url, json=json_data)
+    return dumps(resp.text)
     
 
 if __name__ == "__main__":
