@@ -187,7 +187,9 @@ def create_invoice():
     json_data = request.get_json()
     url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
     resp = requests.post(url, json=json_data)
-    return dumps(resp.text)
+    data = resp.text
+    data = data.replace("\n", "<br/>")
+    return (data)
     
 
 if __name__ == "__main__":
