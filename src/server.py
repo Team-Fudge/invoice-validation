@@ -138,7 +138,7 @@ def verify_schema_xml():
     token = request.args.get('token')
     data = request.data
     resp = verify_schema(token, data)
-    report = compile_report(resp, syntax = True)
+    report = compile_report(resp, schema = True)
     return dumps(
      report
     ) 

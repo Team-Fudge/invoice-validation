@@ -12,18 +12,43 @@ def open_file_as_string(file_name):
 
     return data
 
-def verify_schema_request(invoice):
-    headers = {'Content-Type': 'application/xml'}
-    return requests.post(config.url + 'invoice/verify/schema', data = invoice, headers = headers)
+# Register Request
 
-def test_empty_xml_type():
-    assert verify_schema_request('''''').status_code == 400
-    assert isinstance(verify_schema_request('''''').json(), dict)
+def auth_register_request(email, password, name_first, name_last):
+    return requests.post(config.url + 'auth/register', json={
+        'email': email,
+        'password': password,
+        'name_first': name_first,
+        'name_last': name_last
+    })
 
-def test_incorrect_xml_type():
-    assert verify_schema_request(open_file_as_string("schema_incorrect.xml")).status_code == 200
-    assert isinstance(verify_schema_request(open_file_as_string("schema_incorrect.xml")).json(),dict)
+# Clear Request
+def clear_request():
+    return requests.delete(config.url + 'clear', params={})
 
-def test_correct_xml_type():
-    assert verify_schema_request(open_file_as_string("schema_correct.xml")).status_code == 200
-    assert isinstance(verify_schema_request(open_file_as_string("schema_correct.xml")).json(),dict)
+@pytest.fixture(autouse=True)
+def clear():
+	clear_request()
+	pass
+
+@pytest.fixture
+def user():
+	user_data = auth_register_request("user@gmail.com", "password", "first", "last").json()
+	return {'u_id': user_data['user_id'], 'token': user_data['token']}
+
+def verify_schema_request(token, invoice):
+    return requests.post(config.url + 'invoice/verify/schema', params={
+        'token': token
+    }, data=invoice)
+    
+def test_empty_xml_type(user):
+    assert verify_schema_request(user['token'], '''''').status_code == 400
+    assert isinstance(verify_schema_request(user['token'], '''''').json(), dict)
+
+def test_incorrect_xml_type(user):
+    assert verify_schema_request(user['token'], open_file_as_string("schema_incorrect.xml")).status_code == 200
+    assert isinstance(verify_schema_request(user['token'], open_file_as_string("schema_incorrect.xml")).json(),dict)
+
+def test_correct_xml_type(user):
+    assert verify_schema_request(user['token'], open_file_as_string("schema_correct.xml")).status_code == 200
+    assert isinstance(verify_schema_request(user['token'], open_file_as_string("schema_correct.xml")).json(),dict)

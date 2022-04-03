@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 from src.error import InputError, AccessError
 import re
 import os
+from src.helper import valid_token, valid_user_id
 
 def check_root(string_xml):
 	root = ET.fromstring(string_xml)
@@ -37,7 +38,10 @@ def check_min_one(string_xml, tag):
         return 1
     return None
 
-def verify_schema(string_xml):
+def verify_schema(token, string_xml):
+    
+    if not valid_token(token):
+        raise AccessError(description='Invalid token')
     
     if len(string_xml) == 0:
         raise InputError("No file recieved")
