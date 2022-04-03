@@ -180,6 +180,15 @@ def active():
         'schema_validator_active': True,
     })
 
+# Invoice Creation APi
+
+@APP.route("/invoice/create", methods=['GET', 'POST'])
+def create_invoice():
+    json_data = request.data
+    resp = requests.post('https://seng-donut-frontend.azurewebsites.net/json/convert', data=json_data)
+    return dumps(resp)
+    
+
 if __name__ == "__main__":
     # Load in saved data
     try:
