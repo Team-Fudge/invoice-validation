@@ -12,19 +12,42 @@ def open_file_as_string(file_name):
 
     return data
 
+def auth_register_request(email, password, name_first, name_last):
+    return requests.post(config.url + 'auth/register', json={
+        'email': email,
+        'password': password,
+        'name_first': name_first,
+        'name_last': name_last
+    })
 
-def verify_syntax_request(invoice):
-    headers = {'Content-Type': 'application/xml'}
-    return requests.post(config.url + 'invoice/verify/syntax', data = invoice, headers = headers)
+# Clear Request
+def clear_request():
+    return requests.delete(config.url + 'clear', params={})
 
-def test_empty_xml_type():
-    assert verify_syntax_request('''''').status_code == 400
-    assert isinstance(verify_syntax_request('''''').json(), dict)
+@pytest.fixture(autouse=True)
+def clear():
+	clear_request()
+	pass
 
-def test_bad_xml_type():
-    assert verify_syntax_request(open_file_as_string("example_broken.xml")).status_code == 200
-    assert isinstance(verify_syntax_request(open_file_as_string("example_broken.xml")).json(),dict)
+@pytest.fixture
+def user():
+	user_data = auth_register_request("user@gmail.com", "password", "first", "last").json()
+	return {'u_id': user_data['user_id'], 'token': user_data['token']}
 
-def test_good_xml_type():
-    assert verify_syntax_request(open_file_as_string("example_good.xml")).status_code == 200
-    assert isinstance(verify_syntax_request(open_file_as_string("example_good.xml")).json(),dict)
+
+def verify_syntax_request(token, invoice):
+    return requests.post(config.url + 'invoice/verify/syntax', params={
+        'token': token
+    }, data=invoice)
+
+def test_empty_xml_type(user):
+    assert verify_syntax_request(user['token'], '''''').status_code == 400
+    assert isinstance(verify_syntax_request(user['token'], '''''').json(), dict)
+
+def test_bad_xml_type(user):
+    assert verify_syntax_request(user['token'], open_file_as_string("example_broken.xml")).status_code == 200
+    assert isinstance(verify_syntax_request(user['token'], open_file_as_string("example_broken.xml")).json(),dict)
+
+def test_good_xml_type(user):
+    assert verify_syntax_request(user['token'], open_file_as_string("example_good.xml")).status_code == 200
+    assert isinstance(verify_syntax_request(user['token'], open_file_as_string("example_good.xml")).json(),dict)

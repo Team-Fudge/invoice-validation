@@ -1,4 +1,4 @@
-
+import sys
 import pytest
 import requests
 import json
@@ -19,36 +19,62 @@ string2 = bytes(bytearray(string2, encoding='utf-8'))
 # Empty string example
 string3 = " "
 
-def verify_wellformedness_request(invoice):
-    headers = {'Content-Type': 'application/xml'}
-    return requests.post(config.url + 'invoice/verify/wellformedness', data = invoice, headers = headers)
+# Register Request
+
+def auth_register_request(email, password, name_first, name_last):
+    return requests.post(config.url + 'auth/register', json={
+        'email': email,
+        'password': password,
+        'name_first': name_first,
+        'name_last': name_last
+    })
+
+# Clear Request
+def clear_request():
+    return requests.delete(config.url + 'clear', params={})
+
+@pytest.fixture(autouse=True)
+def clear():
+	clear_request()
+	pass
+
+
+def verify_wellformedness_request(token, invoice):
+    return requests.post(config.url + 'invoice/verify/wellformedness', params={
+        'token': token
+    }, data=invoice)
+
+@pytest.fixture
+def user():
+	user_data = auth_register_request("user@gmail.com", "password", "first", "last").json()
+	return {'u_id': user_data['user_id'], 'token': user_data['token']}
     
 # Blackbox/HTTP Testing
-def test_wellformedness_verify_request_good():
-    assert verify_wellformedness_request(string1).status_code == 200
-    assert isinstance(verify_wellformedness_request(string1).json(),dict)
+def test_wellformedness_verify_request_good(user):
+    assert verify_wellformedness_request(user['token'], string1).status_code == 200
+    assert isinstance(verify_wellformedness_request(user['token'], string1).json(),dict)
 
-def test_wellformedness_verify_request_bad():
-    assert verify_wellformedness_request(string2).status_code == 200
-    assert isinstance(verify_wellformedness_request(string2).json(),dict)
+def test_wellformedness_verify_request_bad(user):
+    assert verify_wellformedness_request(user['token'], string2).status_code == 200
+    assert isinstance(verify_wellformedness_request(user['token'], string2).json(),dict)
 
-def test_wellformedness_verify_request_empty():
-    assert verify_wellformedness_request(string3).status_code == 200
-    assert isinstance(verify_wellformedness_request(string3).json(),dict)
+def test_wellformedness_verify_request_empty(user):
+    assert verify_wellformedness_request(user['token'], string3).status_code == 200
+    assert isinstance(verify_wellformedness_request(user['token'], string3).json(),dict)
 
 # Whitebox testing
-def test_wellformedness_invoice_correct():
-    assert verify_wellformedness_request(string1).status_code == 200
-    assert verify_wellformedness_request(string1).json() == {'broken_rules': 'No broken rules found. Invoice is well-formed!'}
+def test_wellformedness_invoice_correct(user):
+    assert verify_wellformedness_request(user['token'], string1).status_code == 200
+    assert verify_wellformedness_request(user['token'], string1).json() == {'broken_rules': 'No broken rules found. Invoice is well-formed!'}
 
-def test_wellformedness_invoice_wrong():
-    assert verify_wellformedness_request(string2).status_code == 200
-    assert verify_wellformedness_request(string2).json() =={'broken_rules': ["ERROR ON LINE 23: Failed to parse QName 'cbc:'", 
+def test_wellformedness_invoice_wrong(user):
+    assert verify_wellformedness_request(user['token'], string2).status_code == 200
+    assert verify_wellformedness_request(user['token'], string2).json() =={'broken_rules': ["ERROR ON LINE 23: Failed to parse QName 'cbc:'", 
                                                              'ERROR ON LINE 23: Opening and ending tag mismatch: CityName line 23 and cbc:', 
                                                              'ERROR ON LINE 33: Opening and ending tag mismatch: PartyName line 19 and Party', 
                                                              'ERROR ON LINE 34: Opening and ending tag mismatch: Party line 15 and AccountingSupplierParty', 
                                                              'ERROR ON LINE 101: Opening and ending tag mismatch: AccountingSupplierParty line 14 and Invoice', 
                                                              'ERROR ON LINE 101: Premature end of data in tag Invoice line 2']}
-def test_wellformedness_invoive_empty():
-    assert verify_wellformedness_request(string3).status_code == 200
-    assert verify_wellformedness_request(string3).json() == {"broken_rules":["ERROR ON LINE 1: Start tag expected, '<' not found"]}
+def test_wellformedness_invoive_empty(user):
+    assert verify_wellformedness_request(user['token'], string3).status_code == 200
+    assert verify_wellformedness_request(user['token'], string3).json() == {"broken_rules":["ERROR ON LINE 1: Start tag expected, '<' not found"]}
