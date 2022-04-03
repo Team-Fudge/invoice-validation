@@ -11,6 +11,12 @@ from src.peppol_validation import check_reference_number, check_date_syntax, che
 from src.error import InputError
 from src.error import AccessError
 
+# Data Persistence
+from src.backup import interval_backup
+import threading
+import pickle
+from src.data_store import data_store
+
 # Functions
 from src.schema_validation import verify_schema
 from src.verify_syntax import verify_syntax_errors
@@ -175,5 +181,16 @@ def active():
     })
 
 if __name__ == "__main__":
+    # Load in saved data
+    try:
+        # If previous data exists, load it in to the data store
+        data = pickle.load(open("data.p", "rb"))
+        data_store.set(data)
+    except:
+        # Otherwise, do nothing
+        pass
+
+    # Start periodic backup
+    threading.Thread(target=interval_backup, args=()).start()
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
     APP.run(host='0.0.0.0', port=config.port) # Do not edit this port
