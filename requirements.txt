@@ -1,9 +1,0 @@
-beautifulsoup4==4.10.0
-Flask==2.0.1
-Flask_Cors==3.0.10
-lxml==4.3.2
-pytest==3.10.1
-requests==2.21.0
-Werkzeug==2.0.0
-gunicorn==20.1.0
-itsdangerous==2.0.1
