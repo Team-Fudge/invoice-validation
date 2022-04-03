@@ -54,14 +54,4 @@ def test_base_quantity_more_than_0():
     string_xml = open_file("peppol_incorrect.xml")
     # No buyer or seller adddress (invalid invoice)
     assert(check_if_base_quantity_is_positive_number(string_xml) == {'broken_rule' : "PEPPOL - EN16931 - R121", "broken_rule_detailed" : "Base quantity MUST be a positive number abover 0"})
-    
-def test_valid_invoic():
-
-    empty_broken_rules()
-    string_xml = open_file("example_good.xml")
-    # Valid invoice
-
-    for element in check_valid(string_xml):
-        assert element == None
-    
 
