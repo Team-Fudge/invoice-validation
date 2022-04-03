@@ -4,6 +4,7 @@ import requests
 import json
 from src import server
 from src import config
+from src.verify_syntax import verify_syntax_errors
 
 '''
 def open_file_as_string(file_name):
@@ -37,21 +38,18 @@ def user():
 	return {'u_id': user_data['user_id'], 'token': user_data['token']}
 
 
-def verify_syntax_request(token, invoice):
-    return requests.post(config.url + 'invoice/verify/syntax', params={
-        'token': token
-    }, data=invoice)
-
 #the below are whiteboard tests
 
 def test_output_wrong_xml(user):
-    assert(verify_syntax_request(user['token'], open_file_as_string("example_broken.xml")).json() == {'broken_rules': ['BR-01'],
+    assert(verify_syntax_errors(user['token'], open_file_as_string("example_broken.xml")) == {'broken_rules': ['BR-01'],
                                                      'broken_rules_detailed': ['[BR-01]-An Invoice shall have a Specification identifier (BT-24).'],
                                                      'disclaimer': 'The current version of this microservice can only test syntax errors BR-01 to BR-16'
                                                      })
 def test_output_correct_xml(user):
-    assert(verify_syntax_request(user['token'], open_file_as_string("example_good.xml")).json() == {"broken_rules": [], "broken_rules_detailed": [], "disclaimer": 'The current version of this microservice can only test syntax errors BR-01 to BR-16'})
+    assert(verify_syntax_errors(user['token'], open_file_as_string("example_good.xml")) == {"broken_rules": [], "broken_rules_detailed": [], "disclaimer": 'The current version of this microservice can only test syntax errors BR-01 to BR-16'})
 
 def test_output_empty_xml(user):
-    assert verify_syntax_request(user['token'], open_file_as_string("example_empty.xml")).status_code == 400
+    with pytest,raises(InputError):
+        verify_syntax_errors(user['token'], open_file_as_string("example_empty.xml"))
+
 '''
