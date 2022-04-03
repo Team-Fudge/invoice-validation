@@ -1,6 +1,7 @@
 import sys
 import signal
 from json import dumps
+import json
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 import requests
@@ -187,9 +188,10 @@ def create_invoice():
     json_data = request.get_json()
     url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
     resp = requests.post(url, json=json_data)
-    data = resp.text
-    data = data.replace("\n", "<br/>")
-    return (data)
+    #data = json.loads(resp.text)
+    #print(data, file=sys.stderr)
+    #data = data.replace("\n", "<br/>")
+    return dumps(data)
     
 
 if __name__ == "__main__":
