@@ -1,0 +1,28 @@
+^C:\USERS\YSAEU\ONEDRIVE\DESKTOP\INVOICE_VALIDATION_FRONTEND\BUILD\WINDOWS\CMAKEFILES\1EDB0CF5C70A118C6F92E9FBFC507BF7\FLUTTER_WINDOWS.DLL.RULE
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=C:\Users\ysaeu\OneDrive\Documents\flutter PROJECT_DIR=C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend FLUTTER_ROOT=C:\Users\ysaeu\OneDrive\Documents\flutter FLUTTER_EPHEMERAL_DIR=C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend\windows\flutter\ephemeral PROJECT_DIR=C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend FLUTTER_TARGET=C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend\lib\main.dart DART_DEFINES=Zmx1dHRlci5pbnNwZWN0b3Iuc3RydWN0dXJlZEVycm9ycz10cnVl,RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ== DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false PACKAGE_CONFIG=C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend\.dart_tool\package_config.json C:/Users/ysaeu/OneDrive/Documents/flutter/packages/flutter_tools/bin/tool_backend.bat windows-x64 Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\YSAEU\ONEDRIVE\DESKTOP\INVOICE_VALIDATION_FRONTEND\BUILD\WINDOWS\CMAKEFILES\F86C2C1924FC2D113038E2C45896F447\FLUTTER_ASSEMBLE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\YSAEU\ONEDRIVE\DESKTOP\INVOICE_VALIDATION_FRONTEND\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/windows -BC:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows --check-stamp-file C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutter/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

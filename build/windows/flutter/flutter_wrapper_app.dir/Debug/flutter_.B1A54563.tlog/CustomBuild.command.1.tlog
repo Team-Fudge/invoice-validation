@@ -1,0 +1,10 @@
+^C:\USERS\YSAEU\ONEDRIVE\DESKTOP\INVOICE_VALIDATION_FRONTEND\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/windows -BC:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows --check-stamp-file C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutter/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

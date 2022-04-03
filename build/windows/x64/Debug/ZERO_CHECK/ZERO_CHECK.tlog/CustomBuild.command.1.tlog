@@ -1,0 +1,10 @@
+^C:\USERS\YSAEU\ONEDRIVE\DESKTOP\INVOICE_VALIDATION_FRONTEND\BUILD\WINDOWS\CMAKEFILES\8D6195BDE2DF6CA0335BC3E77630C890\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/windows -BC:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/invoice_validation_frontend.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

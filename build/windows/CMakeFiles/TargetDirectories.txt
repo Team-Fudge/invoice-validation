@@ -1,0 +1,10 @@
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/CMakeFiles/INSTALL.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/CMakeFiles/ALL_BUILD.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/CMakeFiles/ZERO_CHECK.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutter/CMakeFiles/flutter_wrapper_app.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutter/CMakeFiles/flutter_assemble.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutter/CMakeFiles/INSTALL.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/runner/CMakeFiles/invoice_validation_frontend.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/runner/CMakeFiles/INSTALL.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/runner/CMakeFiles/ALL_BUILD.dir
