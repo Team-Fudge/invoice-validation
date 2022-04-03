@@ -5,7 +5,11 @@ from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 import requests
 from src import config
+<<<<<<< HEAD
 from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_xml_empty, check_if_one_tax_total_is_provided, check_if_base_quantity_is_positive_number, check_valid
+=======
+from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_xml_empty, check_valid
+>>>>>>> main
 
 # Errors
 from src.error import InputError
@@ -123,8 +127,13 @@ def verify_peppol():
     broken_ruless = []
 
     # Validating all Rules
+<<<<<<< HEAD
     broken_ruless = check_valid(token, xml_file)
 
+=======
+    broken_ruless = check_valid(xml_file)
+   
+>>>>>>> main
     # Getting rid of all None elements in the broken rules 
     try:
         while True:
@@ -134,7 +143,11 @@ def verify_peppol():
 
     dict_broken_rules = {"broken_rules": broken_ruless}
     
+<<<<<<< HEAD
     report = compile_report(token, dict_broken_rules, peppol = True) 
+=======
+    report = compile_report(dict_broken_rules, peppol = True) 
+>>>>>>> main
     return dumps(report)
 
 
