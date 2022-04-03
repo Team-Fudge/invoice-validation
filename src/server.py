@@ -2,7 +2,6 @@ import sys
 import signal
 from json import dumps
 from flask import Flask, request, send_from_directory, jsonify
-import simplejson as json
 from flask_cors import CORS
 import requests
 from src import config
