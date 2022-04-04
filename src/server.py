@@ -1,6 +1,7 @@
 import sys
 import signal
 from json import dumps
+import json
 from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 import requests
@@ -179,6 +180,16 @@ def active():
         'PEPPOL_validator_active': True,
         'schema_validator_active': True,
     })
+
+# Invoice Creation APi
+
+@APP.route("/invoice/create", methods=['GET', 'POST'])
+def create_invoice():
+    json_data = request.get_json()
+    url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
+    resp = requests.post(url, json=json_data)
+    return dumps(resp.text)
+    
 
 if __name__ == "__main__":
     # Load in saved data
