@@ -105,7 +105,8 @@ def verify_wellformedness_invoice():
 # Syntax
 @APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
+    #token = request.args.get('token')
     data = request.data
     resp = verify_syntax_errors(token, data)
     report = compile_report(resp, syntax = True) 
