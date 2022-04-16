@@ -97,7 +97,6 @@ def auth_logout_user():
 @APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
 def verify_wellformedness_invoice():
     token = request.headers['Authorisation']
-    # token = request.args.get('token')
     data = request.data
     resp = verify_wellformedness(token, data)
     return dumps(resp)
@@ -106,7 +105,6 @@ def verify_wellformedness_invoice():
 @APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
     token = request.headers['Authorisation']
-    #token = request.args.get('token')
     data = request.data
     resp = verify_syntax_errors(token, data)
     report = compile_report(resp, syntax = True) 
@@ -144,7 +142,7 @@ def verify_peppol():
 # Schema
 @APP.route("/invoice/verify/schema", methods=['GET', 'POST'])
 def verify_schema_xml():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     data = request.data
     resp = verify_schema(token, data)
     report = compile_report(resp, schema = True)

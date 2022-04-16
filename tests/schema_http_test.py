@@ -37,9 +37,8 @@ def user():
 	return {'u_id': user_data['user_id'], 'token': user_data['token']}
 
 def verify_schema_request(token, invoice):
-    return requests.post(config.url + 'invoice/verify/schema', params={
-        'token': token
-    }, data=invoice)
+    header = {'Authorisation': token}
+    return requests.post(config.url + 'invoice/verify/schema', headers=header, data=invoice)
     
 def test_empty_xml_type(user):
     assert verify_schema_request(user['token'], '''''').status_code == 400
