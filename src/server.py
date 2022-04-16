@@ -154,7 +154,7 @@ def verify_schema_xml():
 # all
 @APP.route("/invoice/verify/all", methods=['GET', 'POST'])
 def verify_all():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     data = request.data
 
     resp = verify_wellformedness(token, data)

@@ -37,10 +37,8 @@ def user():
 	return {'u_id': user_data['user_id'], 'token': user_data['token']}
 
 def verify_syntax_request(token, invoice):
-    headers = {'Content-Type': 'application/xml'}
-    return requests.post(config.url + 'invoice/verify/all', params={
-        'token': token
-    }, data=invoice)
+    header = {'Authorisation': token}
+    return requests.post(config.url + 'invoice/verify/all', headers=header, data=invoice)
     
 def test_bad_xml_type(user):
     assert verify_syntax_request(user['token'], open_file_as_string("example_broken.xml")).status_code == 200
