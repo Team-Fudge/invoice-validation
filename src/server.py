@@ -96,7 +96,7 @@ def auth_logout_user():
 # Wellformedness
 @APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
 def verify_wellformedness_invoice():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     data = request.data
     resp = verify_wellformedness(token, data)
     return dumps(resp)
@@ -104,7 +104,7 @@ def verify_wellformedness_invoice():
 # Syntax
 @APP.route("/invoice/verify/syntax", methods=['GET', 'POST'])
 def verify_syntax():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     data = request.data
     resp = verify_syntax_errors(token, data)
     report = compile_report(resp, syntax = True) 
@@ -119,7 +119,7 @@ def verify_syntax():
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
     
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     xml_file = request.data
     broken_ruless = []
 
@@ -142,7 +142,7 @@ def verify_peppol():
 # Schema
 @APP.route("/invoice/verify/schema", methods=['GET', 'POST'])
 def verify_schema_xml():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     data = request.data
     resp = verify_schema(token, data)
     report = compile_report(resp, schema = True)
@@ -154,7 +154,7 @@ def verify_schema_xml():
 # all
 @APP.route("/invoice/verify/all", methods=['GET', 'POST'])
 def verify_all():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     data = request.data
 
     resp = verify_wellformedness(token, data)

@@ -36,9 +36,8 @@ def user():
 
 
 def verify_syntax_request(token, invoice):
-    return requests.post(config.url + 'invoice/verify/syntax', params={
-        'token': token
-    }, data=invoice)
+    header = {'Authorisation': token}
+    return requests.post(config.url + 'invoice/verify/syntax', headers=header , data=invoice)
 
 def test_empty_xml_type(user):
     assert verify_syntax_request(user['token'], '''''').status_code == 400

@@ -40,9 +40,8 @@ def clear():
 
 
 def verify_wellformedness_request(token, invoice):
-    return requests.post(config.url + 'invoice/verify/wellformedness', params={
-        'token': token
-    }, data=invoice)
+    header = {'Authorisation': token}
+    return requests.post(config.url + 'invoice/verify/wellformedness', headers = header, data=invoice)
 
 @pytest.fixture
 def user():

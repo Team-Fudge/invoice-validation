@@ -12,7 +12,7 @@ def open_file_as_string(file_name):
 
     return data
 
-<<<<<<< HEAD
+
 # Register Request
 
 def auth_register_request(email, password, name_first, name_last):
@@ -34,9 +34,8 @@ def clear():
 
 
 def verify_peppol_request(token, invoice):
-    return requests.post(config.url + 'invoice/verify/peppol', params={
-        'token': token
-    }, data=invoice)
+    header = {'Authorisation': token}
+    return requests.post(config.url + 'invoice/verify/peppol', headers = header, data=invoice)
 
 @pytest.fixture
 def user():
