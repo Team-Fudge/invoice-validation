@@ -121,7 +121,7 @@ def verify_syntax():
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
     
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
     xml_file = request.data
     broken_ruless = []
 
