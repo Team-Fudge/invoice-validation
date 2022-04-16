@@ -96,7 +96,8 @@ def auth_logout_user():
 # Wellformedness
 @APP.route("/invoice/verify/wellformedness", methods=['GET', 'POST'])
 def verify_wellformedness_invoice():
-    token = request.args.get('token')
+    token = request.headers['Authorisation']
+    # token = request.args.get('token')
     data = request.data
     resp = verify_wellformedness(token, data)
     return dumps(resp)
