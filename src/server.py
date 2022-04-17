@@ -7,6 +7,7 @@ from flask_cors import CORS
 import requests
 from src import config
 from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_xml_empty, check_if_one_tax_total_is_provided, check_if_base_quantity_is_positive_number, check_valid
+import xmltodict
 
 # Errors
 from src.error import InputError
@@ -188,10 +189,9 @@ def create_invoice():
     json_data = request.get_json()
     url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
     resp = requests.post(url, json=json_data)
-    return dumps(resp.text)
+    return (resp.text)
 
 # Invoice Storage APi
-
 @APP.route("/invoice/storage", methods=['GET', 'POST'])
 def invoice_storage():
     json_data = request.get_json()
@@ -207,8 +207,6 @@ def invoice_sending():
     url = 'https://virtserver.swaggerhub.com/SE2Y22G24/e-invoice-sending/1.0.0/invoice/send/email'
     resp = requests.post(url, json=json_data)
     return dumps(resp.text)
-    
-    
 
 if __name__ == "__main__":
     # Load in saved data
