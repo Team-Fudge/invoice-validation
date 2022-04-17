@@ -190,7 +190,23 @@ def create_invoice():
     url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
     resp = requests.post(url, json=json_data)
     return (resp.text)
-    
+
+# Invoice Storage APi
+@APP.route("/invoice/storage", methods=['GET', 'POST'])
+def invoice_storage():
+    json_data = request.get_json()
+    url = 'https://virtserver.swaggerhub.com/YeohSengWeng/Invoice_storage/1.0.0/upload'
+    resp = requests.post(url, json=json_data)
+    return dumps(resp.text)
+
+# Invoice Sending APi
+
+@APP.route("/invoice/sending", methods=['GET', 'POST'])
+def invoice_sending():
+    json_data = request.get_json()
+    url = 'https://virtserver.swaggerhub.com/SE2Y22G24/e-invoice-sending/1.0.0/invoice/send/email'
+    resp = requests.post(url, json=json_data)
+    return dumps(resp.text)
 
 if __name__ == "__main__":
     # Load in saved data
