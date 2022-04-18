@@ -26,7 +26,7 @@ jobs:
       id: pytest
       uses: alexanderdamiani/pytester-cov@v1.2.0
       with:
-        pytest-root-dir: 'invoice-validation/'
+        pytest-root-dir: 'invoice-validation/tests'
         cov-threshold-single: ${{ env.COVERAGE_SINGLE }}
         cov-threshold-total: ${{ env.COVERAGE_TOTAL }}
 
