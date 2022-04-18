@@ -25,7 +25,7 @@ def create_token(u_id):
     store['curr_session_id'] += 1
 
 	# Create the JSW token with the user ID and session ID
-    token = jwt.encode({'u_id': u_id, 's_id': s_id, 'exp': datetime.now(tz=timezone.utc) + timedelta(minutes=30) }, SECRET, algorithm='HS256')
+    token = jwt.encode({'u_id': u_id, 's_id': s_id, 'exp': datetime.now(tz=timezone.utc) + timedelta(minutes=200) }, SECRET, algorithm='HS256')
     
     data_store.set(store)
     return token
