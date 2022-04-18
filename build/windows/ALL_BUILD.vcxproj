@@ -149,6 +149,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{7596DB23-D3E1-3D04-A8B5-559956B63573}</Project>
       <Name>invoice_validation_frontend</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend\build\windows\plugins\url_launcher_windows\url_launcher_windows_plugin.vcxproj">
+      <Project>{9FF6889E-3196-329E-A3E4-1E06DE89918A}</Project>
+      <Name>url_launcher_windows_plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -176,7 +176,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend\build\windows\runner\ALL_BUILD.vcxproj">
+    <ProjectReference Include="C:\Users\ysaeu\OneDrive\Desktop\invoice_validation_frontend\build\windows\plugins\url_launcher_windows\ALL_BUILD.vcxproj">
       <Project>{06E6B24B-4949-30E2-849D-0A29516B82FC}</Project>
       <Name>ALL_BUILD</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

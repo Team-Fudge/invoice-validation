@@ -8,3 +8,6 @@ C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/flutte
 C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/runner/CMakeFiles/invoice_validation_frontend.dir
 C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/runner/CMakeFiles/INSTALL.dir
 C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/runner/CMakeFiles/ALL_BUILD.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/plugins/url_launcher_windows/CMakeFiles/url_launcher_windows_plugin.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/plugins/url_launcher_windows/CMakeFiles/INSTALL.dir
+C:/Users/ysaeu/OneDrive/Desktop/invoice_validation_frontend/build/windows/plugins/url_launcher_windows/CMakeFiles/ALL_BUILD.dir
