@@ -136,7 +136,7 @@ def verify_peppol():
 
     dict_broken_rules = {"broken_rules": broken_ruless}
 
-    report = compile_report(token, dict_broken_rules, peppol = True) 
+    report = compile_report(dict_broken_rules, peppol = True) 
     return dumps(report)
 
 
