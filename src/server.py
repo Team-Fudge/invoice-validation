@@ -113,9 +113,6 @@ def verify_syntax():
      report
     )   
 
-# All peppol functions in main will be commented out until either a requirements.txt file
-# is made or to sort out dependencies and the form of ubl invoice can be confirmed to be UBL 2.1
-
 # PEPPOL
 @APP.route("/invoice/verify/peppol", methods=['GET', 'POST'])
 def verify_peppol():
@@ -167,6 +164,10 @@ def verify_all():
     resp = verify_schema(token, data)
     report = compile_report(resp,schema = True) 
 
+    #peppol validation
+    resp = check_valid(token, data)
+    report = compile_report(resp,peppol = True) 
+
     return dumps(
      report
     )  
@@ -190,13 +191,13 @@ def create_invoice():
     url = 'https://seng-donut-deployment.herokuapp.com/json/convert'
     resp = requests.post(url, json=json_data)
     return (resp.text)
-
+    
 # Invoice Storage APi
 @APP.route("/invoice/storage", methods=['GET', 'POST'])
 def invoice_storage():
     json_data = request.get_json()
-    url = 'https://virtserver.swaggerhub.com/YeohSengWeng/Invoice_storage/1.0.0/upload'
-    resp = requests.post(url, json=json_data)
+    url = 'https://teamfudgeh17a.herokuapp.com/store'
+    resp = requests.post(url, data=json_data)
     return dumps(resp.text)
 
 # Invoice Sending APi
@@ -204,9 +205,10 @@ def invoice_storage():
 @APP.route("/invoice/sending", methods=['GET', 'POST'])
 def invoice_sending():
     json_data = request.get_json()
-    url = 'https://virtserver.swaggerhub.com/SE2Y22G24/e-invoice-sending/1.0.0/invoice/send/email'
+    url = 'https://e-invoice-sending-app.herokuapp.com/invoice/send/email'
     resp = requests.post(url, json=json_data)
     return dumps(resp.text)
+
 
 if __name__ == "__main__":
     # Load in saved data
