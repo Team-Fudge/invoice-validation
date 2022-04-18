@@ -7,7 +7,6 @@ from flask_cors import CORS
 import requests
 from src import config
 from src.peppol_validation import check_reference_number, check_date_syntax, check_currency_Code, check_if_buyer_seller_address_exists, check_xml_empty, check_if_one_tax_total_is_provided, check_if_base_quantity_is_positive_number, check_valid
-import xmltodict
 
 # Errors
 from src.error import InputError
